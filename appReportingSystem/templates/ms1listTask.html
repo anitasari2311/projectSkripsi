@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<title>List Task</title>
+</head>
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}   
+	{% extends "NAVBARPROG.html" %}
+  {% set active_page = 'task' %}
+
+      {% else %}
+
+ {% extends "NAVBARSPV.html" %}
+ {% set active_page = 'task' %}
+
+{% endif %}
+
+
+{% block content %}
+<br><br>
+	<div class="judul">
+		<center>LIST TASK</center>
+	</div>
+
+{% if listTask %}
+            <table id="list">
+                
+              <tr>
+                <th>Request Code</th>
+                <th>Title</th>
+                <th>Request Name</th>
+                <th>Department</th>
+                <th>Request Date</th>
+                <th>Deadline</th>
+                <th>Priority</th>
+                <th></th>
+              </tr>
+             {% for row in  listTask %}
+              {% if row['requestStatus'] == 'On Process'%}
+              <tr>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestId']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestJudul']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['userName']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestKategori']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestTanggal']}}</td>
+                <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';">{{row['requestDeadline']}}</td>
+
+                {% if row['requestPrioritas'] == '2' %}
+                    <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';"> <a class ="pri3"> </a></td>
+                    {% else %}
+                    <td onclick="window.location.href='{{ url_for( 'listTask2', request_id=row['requestId'] ) }}';"> <a class ="pri1"> </a></td>
+                    {% endif %}
+
+                
+                <td> 
+                    <button id ="{{row['requestId']}}" class="submit" onclick= "click_process(this.id)" name="finishButton" value="{{row['requestId']}}">Finish</button>
+
+
+                    <div id="modal{{row['requestId']}}" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                        <span class="close" onclick="closeModal()">&times;</span>
+                        <strong>{{row['requestId']}}</strong>
+                        <p> Input Report Code : </p>
+                    <form action ="/admin/task/list/{{row['requestId']}}" method = 'POST' enctype="multipart/form-data">
+                        <input name="kodLap" list="reqFin">
+                        <datalist id="reqFin">
+                          <!-- <select> -->
+                          {% for row in listKodeLap %}
+                            <option value="{{row['ReportId']}}">{{row['ReportId']}}</option>
+                          {% endfor %}
+                          <!-- </select> -->
+                        </datalist>
+
+                        <br>
+                    <label for="attach_file">Attachment</label>
+                  
+                  <input type="file" name="inputFile" placeholder="Attach File" autocomplete="off">
+                
+                      
+                      <!-- <div class="col-75" id="list_org">
+                      <select name='kode'>
+                        {% for row in listKodeLap %}
+                        <option value="{{row[0]}}"></option>
+                         {% endfor %}
+                      </select>
+                    </div> -->
+
+                        
+                        
+                         <button name="finishReq" value ="{{row['requestId']}}"> OK </button>
+                        </form>
+                      </div>
+
+                    </div>
+                    
+                </td>
+                {% else %}
+                <td>
+                    <button class="submitOr" name="inputKode" value="{{row['requestId']}}">InputKode</button>
+                {% endif %}
+              </tr>
+           {% endfor %}
+
+            </table>
+
+{% else %}
+
+<p><center>Tidak ada task yg sedang dikerjakan</center></p>
+
+{% endif %}
+
+
+{% endblock %}
+</body>
+</html>
+
+{% block script %}
+<script type="text/javascript">
+// Get the modal
+
+var btnProcess;
+var modalItem;
+
+// // When the user clicks on <span> (x), close the modal
+function  closeModal() {
+  modalItem.style.display = "none";
+}
+
+// // When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modalItem) {
+    modalItem.style.display = "none";
+  }
+}
+
+function show_modal(modalId){
+
+  modalItem = document.getElementById(modalId);
+  modalItem.style.display = 'block';
+}
+function click_process(processId){
+  show_modal('modal'+processId);
+  //alert('modal'+processId);
+
+}
+
+
+
+
+
+//           BUAT FITUR SEARCH LAPORAN
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+</script>
+{% endblock %}

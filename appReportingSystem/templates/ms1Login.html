@@ -1,0 +1,89 @@
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+
+    <body bgcolor="#F0FFF0">
+
+        <!-- <div>
+            
+            <div id="successMessage" class="alert alert-primary alert-dismissible fade show" role="alert">
+                <img src="/static/images/rep1.png" style="width: 100%; border: 0">
+            </div>
+            
+        </div> -->
+
+
+        <div id="loginBox">
+            <center>
+                <div class="judul">REPORTING SYSTEM</div>          
+
+                <div class="containLogin" >
+                    <!-- <div class="subjudul"><h2>LOG IN</h2></div> -->
+                    <br><br>    
+                    <form action="/login" method="post">
+                        
+                        <div class="row">
+                            <!-- <div class="col-25"> -->
+                                <label for="uname"><b>Username</b></label>
+                            <!-- </div> -->
+
+                            <!-- <div class="col-75"> -->
+                                <input type="text" 
+                                placeholder="  Input Username" 
+                                name="username" 
+                                value="{{request.form.username}}" style="width: 70%;">
+                            <!-- </div> -->
+                        </div>
+                        
+                        <div class="row">
+                            <!-- <div class="col-25"> -->
+                                <label for="psw"><b>Password</b></label>
+                            <!-- </div> -->
+
+                            <!-- <div class="col-75"> -->
+                                <input type="password" 
+                                placeholder="Input Password" 
+                                name="password" 
+                                value="{{request.form.password}}" style="width: 70%;">
+                            <!-- </div> -->
+                        </div>
+                    
+                        
+                        <div class="row" style="padding-top: 40px" >
+                            <button type="submit" class="submit">Login</button>
+                        </div>
+                    </form>
+                    
+
+                        {% if error %}
+                            <p class="error"><strong>Error:</strong> {{ error }}</p>
+                        {% endif %}
+                </div>
+
+            </center>
+        </div>
+
+
+        <script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+
+    <!-- <script>
+
+    $(document).ready(function(){
+
+        $("#successMessage").css({
+       width: $(document).width(),
+       height: $(document).height()
+        });
+
+
+
+        $("#successMessage").delay(200).slideUp(1500);
+
+    });
+
+  </script> -->
+
+    </body>
+</html>

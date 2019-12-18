@@ -1,0 +1,77 @@
+<html>
+<head>
+  <title> Add New Kategori </title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body bgcolor="#F0FFF0">
+
+
+   {% extends "NAVBARSPV.html" %}
+   {% set active_page = 'setting' %}
+
+  
+{% block content %}
+<br><br>
+<div class="judul"><center>INSERT KATEGORI</center></div>
+
+  <div class ="containInsert">
+    <br><br><br>
+    
+    <form id="myForm" action="/sendDataKategori" autocomplete="off" method="POST">
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="kategori">Id Kategori : </label>
+      </div>
+        
+      <div class="col-45">
+        <input type="text" id="idKat" name="idKat">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="kategori">Nama Kategori : </label>
+      </div>
+    
+      <div class="col-45">
+        <input type="text" id="namaKat" name="namaKat" style="text-transform: uppercase;">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="kategori">Aktif : </label>
+      </div>
+    
+      <div class="col-15">
+        <select name="aktifYN">
+          <option name="aktifYN">Y</option>
+          <option name="aktifYN">N</option>
+        </select>
+      </div>
+    </div>
+    
+      <br><br><br><br>
+
+    <center>
+      <div class="colBut">
+        <button class="submit" type="Submit">Save</button>
+      </div>
+     </form>
+
+     <div class="colBut"><form action="/spv/setting/kategori/edit">
+       <button class="submit">Edit Kategori</button></form>
+     </div>
+
+      <div class="colBut"><form action="/spv/home">
+        <button class="submitRed">Cancel</button></form>
+      </div>
+
+    </center>
+  </div> <!-- DIV CONTAIN INSERT -->
+
+    {% endblock %}
+</body>
+</html>

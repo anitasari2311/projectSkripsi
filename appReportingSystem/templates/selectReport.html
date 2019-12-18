@@ -1,0 +1,163 @@
+<html>
+<head>
+  <title>TEST LIST REPORT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styleUser.css') }}">
+</head>
+<body bgcolor="F0FFF0">
+
+{% block content %}
+<br><br>
+<center>
+  <div class="judul">TEST LIST REPORT</div>
+</center>
+
+{% if kode_laporan %}
+  
+<!-- </div> -->
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search report code" title="Type in a name">
+
+    <table id="list">
+      <tr>
+        <th>Report Code</th>
+          <th>Organization</th>
+            <th>Report Title</th>
+              <th>Last Update</th>
+                <th>Download Report</th>
+                  <th>Read Report</th>
+      </tr>
+    {% for row in readReport %}
+      <tr>
+                  <td>{{row.reportId}}</td>
+                <td>{{row.orgId}} - {{row.orgName}}</td>
+              <td>{{row.reportJudul}}</td>
+            <td>{{row.reportLastProc}}</td>
+          <td>
+      <center>
+          <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">Download</button>
+      </center>
+      
+   <!-- Modal content -->
+          <div id="modal2{{row.reportId}}" class="modal">
+    <form action="http://127.0.0.1:5004/downloadReport/{{session['username']}}/{{session['user_id']}}" method="POST">
+            <div class="modal-content">
+              <span class="close" onclick="closeModal2()">&times;</span>
+              <center>
+              <strong>Download {{row.reportId}} - {{row.reportJudul}} </strong>
+              <br><br><br>
+              <p>Confirm download ?</p>
+            </center>
+               <button id="downloadR" name="kodLap" value ="{{row.reportId}}"> OK </button>
+            </div>
+    </form>
+          </div>
+
+        </td>
+
+        <td>
+          <form action="http://127.0.0.1:5004/readNow/{{session['username']}}/{{session['user_id']}}" method="POST">
+          <button id="readR"class="submit" name="kodRead" value="{{row.reportId}}">Read</button>
+        </form>
+        </td>
+    {% endfor %}
+</tr>
+
+    </table>
+
+
+{% else %}
+
+  <center>
+<div class="containEdit">
+          <div class="row" style="display: block;">
+              <div class="tulisan" style="width: 350px; text-align: left">
+                <label for="reportCode">Report Code :</label>
+
+                <form action= "/user/list/testReadReport" method = 'POST'>
+                  <input name="kodeLaporan" list="kodeReport" required>
+                  <br><br><br>
+
+                  <datalist id="kodeReport">
+                    {% for row in reportId %}
+                    <option value="{{row['reportId']}}">{{row['reportId']}}
+                    {% endfor %}
+                  </datalist>
+           </div>
+         </option>
+  <center>
+              <div class="colBut">
+                <button id="tombolSubmit" class="submit" value="edit" type="submit">Submit</button></div>
+                  </form>
+
+              <div class="colBut">
+                  <form action="/user/home">
+                    <button class="submitRed" >Cancel</button></div></form>
+
+ </center>
+</div>
+ 
+</center>
+{% endif %}
+
+</body>
+</html>
+{% endblock %}
+
+{% block script %}
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script>
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function click_process(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+
+  //           BUAT FITUR SEARCH LAPORAN
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+
+
+// $(document).ready(function(){
+//     $('#readR').click(function(){
+//       var kode_laporan = $('#readR').val();
+//       return $.post('http://10.0.111.171:5004/readNow/'+kode_laporan)
+
+
+//     });   
+//   });
+
+</script>
+{% endblock %}

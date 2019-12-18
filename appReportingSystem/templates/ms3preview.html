@@ -1,0 +1,81 @@
+<html>
+<head>
+<link rel="stylesheet" 
+  href="{{ url_for('static', filename='style.css') }}">
+
+  <title> Preview Report </title>
+</head>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}  
+    {% extends "NAVBARPROG.html" %}
+            {% set active_page = 'preview' %}
+
+{% else %}
+
+  {% extends "NAVBARSPV.html" %}
+            {% set active_page = 'preview' %}
+
+{% endif %}
+
+{% block content %}
+<br><br>
+
+
+<div class ="judul">
+  <center>PREVIEW REPORT</center>
+</div>
+
+<br><br><br>
+<center>
+  <div class="containEdit">
+    <form action ="/admin/preview" method = 'POST'>
+      <div class="row">
+              <div class="col-35">
+                <label for="template">Template yang ingin di-preview  </label>
+              </div>
+
+              <div class="col-55">
+                <!-- <datalist id= "report" name= "kodLap">
+                  {% for row in kodeReportAdaQuery %}
+                    <option name="kodLap" value="{{row.reportId}}">{{row.reportId}}</option>
+                  {% endfor %}
+                </datalist> -->
+
+                <select id="report"  name="kodLap">
+                    {% for row in kodeReportAdaQuery %}
+                    <option value="{{row.reportId}}">{{row.reportId}}</option>
+                    {% endfor %}
+                </select>
+              </div>
+      </div>
+
+      <br><br>
+
+      <center>
+        <button id="preview" class="submit">Preview</button>
+    </form>
+</center>
+
+
+</div> <!-- akhiran div containEdit -->
+</center>
+
+
+{% endblock %}
+
+</body>
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#preview').click(function(){
+      // var kode_laporan = $('[name="kodLap"]').val();
+      // $.get('http:///127.0.0.1:5003/testPreviewLaporan/'+kode_laporan)
+
+      alert('Success, 'kode_laporan);
+    });   
+  });
+  </script>
+{% endblock %}
+</html>

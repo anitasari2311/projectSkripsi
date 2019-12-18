@@ -1,0 +1,196 @@
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}
+    
+    {% endblock %}
+  </head>
+  <body bgcolor="#F0FFF0">
+
+    <div id="navbar">
+
+      	<div class="topnav"><ul>
+          {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div id="successMessage" class="alert alert-primary alert-dismissible fade show" role="alert"
+            style="background-color: #4CAF50;height: 50px;font-size: 20px;font-weight: 750">
+                <center><span style="color:white;">{{ message }}</span></center>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        
+          <li><img src="/static/images/logoPharos.png" style="width: 90px; border: 0"></li>
+          
+            {% if active_page == 'home' %}
+              <li class="active"><a href="/admin/home">HOME</a></li>
+              {% else %}
+              <li><a href="/admin/home">HOME</a></li>
+            {% endif %}
+            
+            {% if active_page == 'task' %}
+            <div class="dropdown">
+              <button class="active">TASK
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {% else %}
+            <div class="dropdown">
+              <button class="dropbtn">TASK
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {%endif%}
+
+              <div class="dropdown-content">
+                <a href="/admin/task/available">AVAILABLE TASK</a>
+                <a href="/admin/task/list">LIST TASK</a>
+                <a href="/admin/task/history">HISTORY TASK</a>
+              </div>
+            </div>
+            
+            {% if active_page == 'template' %}
+            <div class="dropdown">
+              <button class="active">TEMPLATE
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {% else %}
+            <div class="dropdown">
+              <button class="dropbtn">TEMPLATE
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {%endif%}
+
+              <div class="dropdown-content">
+                <a href="/admin/template/new">NEW TEMPLATE</a>
+                <a href="/admin/template/edit">EDIT TEMPLATE</a>
+              </div>
+            </div>
+
+
+            {% if active_page == 'query' %}
+            <div class="dropdown">
+              <button class="active">QUERY
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {% else %}
+            <div class="dropdown">
+              <button class="dropbtn">QUERY
+                <i class="fa fa-caret-down"></i>
+              </button>
+              {% endif %}
+
+
+              <div class="dropdown-content">
+                <a href="/admin/query/new">NEW QUERY</a>
+                <a href="/admin/query/edit">EDIT QUERY</a>
+              </div>
+            </div>
+
+            {% if active_page == 'preview' %}
+              <li class="active"><a href="preview">PREVIEW</a></li>
+            {% else %}
+              <li><a href="/admin/preview">PREVIEW</a></li>
+            {% endif %}
+
+
+            {% if active_page == 'schedule' %}
+            <div class="dropdown">
+              <button class="active">SCHEDULING
+                <i class="fa fa-caret-down"></i>
+              </button>
+              {% else %}
+            <div class="dropdown">
+              <button class="dropbtn">SCHEDULING
+                <i class="fa fa-caret-down"></i>
+              </button>
+              {% endif %}
+
+
+              <div class="dropdown-content">
+                <a href="/admin/schedule/new">NEW SCHEDULE</a>
+                <a href="/admin/schedule/edit">EDIT SCHEDULE</a>
+                <a href="/admin/schedule/run">RUN SCHEDULE</a>
+              </div>
+            </div>
+
+            {% if active_page == 'report' %}
+              <li class="active"><a href="listReport">LIST REPORT</a></li>
+            {% else %}
+              <li><a href="/admin/listReport">LIST REPORT</a></li>
+            {% endif %}
+            
+            {% if active_page == 'account' %}
+              <div class="dropdown">
+                <button class="active">ACCOUNT
+                  <i class="fa fa-caret-down"></i>
+                </button>
+            {% else %}
+              <div class="dropdown">
+                <button class="dropbtn">{{session['username']}}
+                  <i class="fa fa-caret-down"></i>
+                </button>
+            {% endif %}
+
+                <div class="dropdown-content">
+                  <a href="/admin/profile">PROFILE</a>
+                  <a href="/logout">LOGOUT</a>
+                </div>
+              </div>
+        </ul>
+
+          </div> <!-- DIV TOPNAV -->
+        
+    </div> <!-- DIV NAVBAR -->
+
+    
+
+    <div id="content">{% block content %}
+
+    {% endblock %}</div>
+
+
+    <div id="script">
+    {% block script %}
+    {% endblock %}
+  </div>
+    <!-- </div> -->
+
+
+    
+
+
+    <div id="footer" style="position: fixed; bottom:0;">
+      {% block footer %}
+      <br><br><br>
+      &copy; Copyright 2019 by <a href="http://domain.invalid/">you</a>.
+      {% endblock %}
+    </div>
+
+
+
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+
+    <script>
+    window.onscroll = function() {scrollFunc()};
+
+    var navbar = document.getElementById("navbar");
+    var sticky = navbar.offsetTop;
+
+    function scrollFunc() {
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky")
+      } else {
+        navbar.classList.remove("sticky");
+      }
+    }
+
+    $(document).ready(function(){
+        $("#successMessage").delay(3000).slideUp(300);
+
+    });
+  </script>
+  </body>
+</html>

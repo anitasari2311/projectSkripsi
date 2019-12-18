@@ -1,0 +1,299 @@
+<html>
+  <head>
+    <title>Available Task</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body bgcolor="#F0FFF0">
+  <br><br>
+
+{% extends "NAVBARSPV.html" %}
+{% set active_page = 'task' %}
+
+{% block content %}
+<br><br>
+
+<center>     
+<div class="judul">AVAILABLE IMPORTANT TASK</div>
+</center>
+
+{% if listAvailTaskSPV %}
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by request id.." title="Type in a name" style="width: 200px">
+
+          <center>
+                          <table id="list">
+                            <tr>
+                              <th>Request Name</th>
+                              <th>Position</th>
+                              <th>Request Code</th>
+                              <th>Title</th>
+                              <th>Department</th>
+                              <th>Organization</th>
+                              <th>Request Date</th>
+                              <th>Deadline</th>                
+                              <th></th>
+                            </tr>
+
+                            {% for taskSPV in listAvailTaskSPV %}
+                              {% if taskSPV['requestPrioritas'] == '1' %}
+                              <tr>
+                              <td>{{taskSPV['userNama']}}</td>
+                              <td>{{taskSPV['userPosisi']}}</td>
+                              <td>{{taskSPV['requestId']}}</td>
+                              <td>{{taskSPV['requestJudul']}}</td>
+                              <td>{{taskSPV['requestKategori']}}</td>
+                              <td>{{taskSPV['requestOrganisasi']}}</td>
+                              <td>{{taskSPV['requestTanggal']}}</td>
+                              <td>{{taskSPV['requestDeadline']}}</td>
+
+            <div class="button">
+            <td><form action="/detailRequest" method="POST">
+            <button class="submit" name = "buttonDetail" value="{{taskSPV['requestId']}}">Select
+            </button></form>
+            </div> 
+
+            <div class="button">
+            <button id="{{taskSPV['requestId']}}" class="submit" name="buttonReject" value="{{taskSPV['requestId']}}" onclick="alertReject(this.id)">Reject</button>
+            </div>
+                          <div id="modal3{{taskSPV['requestId']}}" class="modal">
+
+                          <!-- Modal content -->
+                          <div class="modal-content">
+                            <span class="close" onclick="closeModal3()">&times;</span>
+                            <p style="text-align: center;"><strong>REJECT CONFIRMATION</strong></p>
+                            <p style="text-align: left;">User         : {{taskSPV.userNama}}</p>
+                            <p style="text-align: left;">Request Code : {{taskSPV.requestId}} </p>
+                            <p style="text-align: left;">Title        : {{taskSPV.requestJudul}}</p> <br>
+                          <p> Keterangan: <p>
+                          <textarea name="keteranganReject" style="height:200px"></textarea><br>  
+                                  
+                                    <center>
+                                      <div class="colBut">
+                                        <form action ='/rejectRequest' method = 'POST'>
+                                         <button  class = "submit" value ="{{taskSPV['requestId']}}" name="btnYes"> YES </button>
+                                        </form>
+                                      </div>
+                                       <button  class = "submitRed" value ="{{taskSPV['requestId']}}" onclick="closeModal3()"> NO </button>
+                                    </center>
+                                    </div>
+                                </div> 
+                                
+                                <form action="/undoPrioritasRequest" method='POST'>
+                                <button class="submit" value="{{taskSPV['requestId']}}" name="btnUndo">Undo Prioritas</button>
+                                </form>
+                                </td>
+                              </tr>
+                              {% endif %}  
+                            {% endfor %}
+                          </table> 
+{% else %}
+  <p><center>Tidak ada task normal yang tersedia</center></p>
+{% endif %}
+
+  </center>
+
+<!-- BATAS TASK IMPORTANT -->
+<p><center>_________________________________________________________________________________________________</center></p>
+
+<div class="judul">
+  <center>AVAILABLE NORMAL TASK</center>
+</div>
+
+{% if listAvailTaskSPV %}
+
+<input type="text" id="myInput1" onkeyup="myFunction()" placeholder="Search by request id.." title="Type in a name" style="width: 200px">
+
+          <center>
+                          <table id="list">
+                            <tr>
+                              <th>Request Name</th>
+                              <th>Position</th>
+                              <th>Request Code</th>
+                              <th>Title</th>
+                              <th>Department</th>
+                              <th>Organization</th>
+                              <th>Request Date</th>
+                              <th>Deadline</th>                
+                              <th></th>
+                            </tr>
+
+                            {% for taskSPV in listAvailTaskSPV %}
+                              {% if taskSPV['requestPrioritas'] == '2' %}
+                            <tr>
+                            <td>{{taskSPV['userNama']}}</td>
+                            <td>{{taskSPV['userPosisi']}}</td>
+                            <td>{{taskSPV['requestId']}}</td>
+                            <td>{{taskSPV['requestJudul']}}</td>
+                            <td>{{taskSPV['requestKategori']}}</td>
+                            <td>{{taskSPV['requestOrganisasi']}}</td>
+                            <td>{{taskSPV['requestTanggal']}}</td>
+                            <td>{{taskSPV['requestDeadline']}}</td>
+
+          <div class="button">
+          <td><form action="/detailRequest" method="POST">
+          <button class="submit" name = "buttonDetail" value="{{taskSPV['requestId']}}">Select
+          </button></form>
+          </div> 
+
+          <div class="button">
+          <button id="{{taskSPV['requestId']}}" class="submit" name="buttonReject" value="{{taskSPV['requestId']}}" onclick="alertReject(this.id)">Reject</button>
+          </div>
+                        <div id="modal3{{taskSPV['requestId']}}" class="modal">
+
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                          <span class="close" onclick="closeModal3()">&times;</span>
+                          <p style="text-align: center;"><strong>REJECT CONFIRMATION</strong></p>
+                          <p style="text-align: left;">User         : {{taskSPV.userNama}}</p>
+                          <p style="text-align: left;">Request Code : {{taskSPV.requestId}} </p>
+                          <p style="text-align: left;">Title        : {{taskSPV.requestJudul}}</p> <br>
+                        <p> Keterangan: <p>
+                        <textarea name="keteranganReject" style="height:200px"></textarea><br>  
+                                
+                                  <center>
+                                    <div class="colBut">
+                                      <form action ='/rejectRequest' method = 'POST'>
+                                       <button  class = "submit" value ="{{taskSPV['requestId']}}" name="btnYes"> YES </button>
+                                      </form>
+                                    </div>
+                                     <button  class = "submitRed" value ="{{taskSPV['requestId']}}" onclick="closeModal3()"> NO </button>
+                                  </center>
+                                  </div>
+                              </div> 
+
+    <br>
+        
+                        <div class="button">
+                          <button id="{{taskSPV['requestId']}}" class="submit" name="buttonPriority" value="{{taskSPV['requestId']}}" onclick="alertPrioritas(this.id)">Priority</button></div>
+
+                                  <div id="modal2{{taskSPV['requestId']}}" class="modal">
+
+                                  <!-- Modal content -->
+                                  <div class="modal-content">
+                                    <span class="close" onclick="closeModal2()">&times;</span>
+                                    <p> Are you sure make this report priority? </p> <br>
+
+                                  <center>
+                                  <div class="colBut">
+                                    <form action ="/prioritasRequest" method = 'POST'>
+                                       <button  class = "submit" value ="{{taskSPV['requestId']}}" name="btnYesP"> YES </button>
+                                  </form>
+                                  </div>       
+                              
+
+                                  <div class="colBut">
+                                     <button  class = "submitRed" value ="{{taskSPV['requestId']}}" onclick="closeModal2()"> NO </button>
+                                  </div>
+                                  </center>
+
+                                  </div> 
+
+                              {% endif %}                                
+                            </tr>
+                            {% endfor %}
+                          </table> 
+{% else %}
+  <p><center>Tidak ada task important yang tersedia</center></p>
+{% endif %}
+
+</center>
+</body>
+</html>
+{% endblock %}
+
+{% block script %}
+<script>
+    var x = document.getElementById("slide"+"slide2"+"slide3");
+ checker.onchange = function(){
+if(x.checked){
+    x.disabled = true;
+} 
+else {
+    x.disabled = false;
+}
+}
+///////////////////////////////////////////// MODAL BOX
+var btnProcess;
+var modalItem;
+// // When the user clicks on <span> (x), close the modal
+function  closeModal() {
+  modalItem.style.display = "none";
+}
+// // When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modalItem) {
+    modalItem.style.display = "none";
+  }
+}
+function show_modal(modalId){
+  modalItem = document.getElementById(modalId);
+  modalItem.style.display = 'block';
+}
+function click_process(processId){
+  show_modal('modal'+processId);
+  //alert('modal'+processId);
+}
+//buat button prioritas
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function alertPrioritas(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+// buat button reject
+  var btnProcess3;
+  var modalItem3;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal3() {
+    modalItem3.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem3) {
+      modalItem3.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem3 = document.getElementById(modalId);
+    modalItem3.style.display = 'block';
+  }
+  function alertReject(processId){
+    show_modal('modal3'+processId);
+    //alert('modal'+processId);
+  }
+//           BUAT FITUR SEARCH LAPORAN DI AVAILABLE IMPORTANT TASK
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+</script>
+{% endblock %}

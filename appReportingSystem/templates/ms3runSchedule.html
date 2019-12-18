@@ -1,0 +1,180 @@
+<html>
+        
+        <head>
+        	<title>Run Schedule</title>
+        	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        </head>
+    
+
+
+<body bgcolor="#F0FFF0">
+
+
+                            {% if session.get('position') == 'Admin' %}
+                              {% extends "NAVBARPROG.html" %}
+                              {% set active_page = 'schedule' %}
+
+                            {% else %}
+                              {% extends "NAVBARSPV.html" %}
+                              {% set active_page = 'schedule' %}
+
+
+{% endif %}
+
+{% block content %}
+<br><br><br><br>
+
+<div class ="judul">
+      <center>RUN SCHEDULE</center>
+    </div>
+              <h1>TODAY'S REPORT TO RUN</h1>
+                <table id="list">
+                  <tr >
+                    <th style="background-color: #98AFC7;">Report Code</th>
+                      <th style="background-color: #98AFC7;">Organization</th>
+                        <th style="background-color: #98AFC7;">Category</th>
+                          <th style="background-color: #98AFC7;">Receiver</th>
+                            <th style="background-color: #98AFC7;">Server</th>
+                              <th style="background-color: #98AFC7;">Months</th>
+                                <th style="background-color: #98AFC7;">Day</th>
+                                  <th style="background-color: #98AFC7;">Date</th>
+                  </tr>
+
+                {% for row in kodeToday %}
+                  <tr>
+
+                    <td>{{row.reportId}}</td>
+                      <td>{{row.org_id}} - {{row.orgNama}}</td>
+                        <td>{{row.ktgri_id}} - {{row.kateNama}}</td>
+                          <td>{{row.namaPenerima}}</td>
+                            <td>{{row.server_id}}</td>
+                              <td>{{row.schBulan}}</td>
+                                <td>{{row.schHari}}</td>
+                                  <td>{{row.schTanggal}}</td>
+                    
+                  </tr>
+                {% endfor %}
+                 
+                </table>
+
+<br><br>
+
+          <h1>SUCCESS</h1>
+
+            <table id="list">
+              <tr>
+                <th>Report Code</th>
+                  <th>Organization</th>
+                    <th>Category</th>
+                      <th>Run Date</th>
+                        <th>Run Time</th>
+                          <th>End Time</th>
+                            <th>Server</th>
+              </tr>
+                  
+              {% for row in statusSchedule %}
+                {% if row.runStatus == 'B' %}
+                  <tr >
+                    <td>{{row.reportId}}</td>
+                      <td>{{row.orgId}} - {{row.orgNama}}</td>
+                        <td>{{row.ktgriId}} - {{row.kateNama}}</td>
+                          <td>{{row.runDate}}</td>
+                            <td>{{row.runStartTime}}</td>
+                              <td>{{row.runEndTime}}</td>
+                                <td>{{row.serverId}}</td>
+                  </tr>
+                {% endif %}
+              {% endfor %} 
+            </table>
+
+<br><br>
+
+              <h1>FAILED TO RUN</h1>
+                <table id="list">
+                  <tr>
+                    <th style="background-color: #F87217;">Report Code</th>
+                      <th style="background-color: #F87217;">Organization</th>
+                        <th style="background-color: #F87217;">Category</th>
+                          <th style="background-color: #F87217;">Run Date</th>
+                            <th style="background-color: #F87217;">Run Time</th>
+                              <th style="background-color: #F87217;">End Time</th>
+                                <th style="background-color: #F87217;">Server</th>
+                                  <th style="background-color: #F87217;">Error Description</th>
+                                    <th style="background-color: #F87217;">Re-run</th>
+                  </tr>
+                  
+                  {% for row in statusSchedule %}
+                    {% if row.runStatus == 'G' %}
+                     <tr >
+                        <td>{{row.reportId}}</td>
+                         <td>{{row.orgId}} - {{row.orgNama}}</td>
+                          <td>{{row.ktgriId}} - {{row.kateNama}}</td>
+                              <td>{{row.runDate}}</td>
+                                <td>{{row.runStartTime}}</td>
+                                  <td>{{row.runEndTime}}</td>
+                                    <td>{{row.serverId}}</td>
+                                      <td>{{row.errorDesc}}</td>
+                                        <td>
+                                            <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="rerunButton" value="{{row.reportId}}">Run</button>
+
+                            <div id="modal2{{row.reportId}}" class="modal">
+
+                      <!-- Modal content -->
+
+              <form action='/reRun' method='POST'>
+                      <div class="modal-content">
+                        <span class="close" onclick="closeModal2()">&times;</span>
+                        <center>
+                        <strong>Re-Run {{row.reportId}}</strong>
+                        <br><br><br>
+                        <p>Confirm Re-Run ?</p>
+                      <!-- </center> -->
+                         <button name="kodLap" value ="{{row.reportId}}"> OK </button>
+                      </div>
+              </form>
+                    </div>
+
+                          </td>
+                      </tr>
+                    {% endif %}
+                  {% endfor %}
+                </table>
+
+
+
+
+
+
+</div>  <!-- DIV / -->
+
+{% endblock %}
+    </body>
+
+
+    {% block script %}
+<script>
+
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function click_process(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+</script>
+{% endblock %}
+
+</html>

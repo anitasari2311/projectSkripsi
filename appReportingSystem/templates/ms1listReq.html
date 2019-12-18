@@ -1,0 +1,158 @@
+<html>
+<head>
+   <title>List Request</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="{{ url_for('static', filename='styleUser.css') }}">
+</head>
+  
+<body bgcolor="#F0FFF0">
+
+    {% extends "ms1NAVBAR.html" %}
+    {% set active_page = 'list' %}
+
+{% block content %}
+    <br><br>
+
+{% if listReqUser %}
+
+
+<div class="judul">
+  <center> LIST REQUEST </center>
+</div>
+
+<table id="list">
+<tr>
+  <th>Request Code</th>
+  <th>Title</th>
+  <th>Request Date</th>
+  <th>Deadline</th>
+  <th>Status</th>
+  <th>PIC</th>
+  <th></th>
+  
+</tr>
+                  
+{% for row in listReqUser %}
+<tr>
+<td> {{row['RequestId']}} </td>            
+<td> {{row['RequestJudul']}} </td>
+<td>{{row['RequestDate']}}</td>
+<td>{{row['RequestDeadline']}}</td>
+
+
+{% if row['RequestStatus'] == 'Finished' %}
+<td>{{row['RequestKodeLaporan']}}</td>
+{% else %}
+<td>{{row['RequestStatus']}}</td>
+{% endif %}
+<td>{{row['RequestPIC']}}</td>
+{% if row['RequestStatus'] == 'Waiting' %}
+<td> 
+<button id ="{{row['RequestId']}}" class="submitRed"  value = "{{row['RequestId']}}" onclick="alertCancel(this.id)">Cancel</button>
+</td>
+
+<div id="modal{{row['RequestId']}}" class="modal">
+
+<!-- Modal content -->
+<div class="modal-content">
+<span class="close" onclick="closeModal()">&times;</span>
+<p> Cancel {{row['RequestJudul']}} ? </p>
+ 
+<form action ="/cancelRequest" method = 'POST'>
+<center>
+<button  class = "submit" value ="{{row['RequestId']}}" name="btnCancel"> YES </button>
+</form>
+
+<br>
+
+<button  class = "submitRed" value ="{{row['RequestId']}}" onclick="closeModal2()"> NO </button>
+</center>
+
+</div>
+
+</div>
+</td>
+
+
+
+{% elif row['RequestStatus'] == 'Finished' %}
+
+
+{% elif row['RequestStatus'] == 'On Process' %}
+<td><button class="submitRed" disabled style="background-color: grey">Cancel</button></td>
+
+{% elif row['RequestStatus'] == 'Confirmed' %}
+
+<td>"Done"</td>{% endif %}
+
+</tr>
+{% endfor %}
+                      
+ </table> 
+
+
+
+{% else %}
+
+<div class="judul">
+  <center>LIST REQUEST</center>
+</div>
+
+<center><p>Anda belum miliki request Laporan </p></center>
+<br><br><br>
+
+
+{% endif %}
+
+  </body>
+  {% endblock %}
+
+{% block script %}
+<script>    
+  var btnProcess;
+  var modalItem;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal() {
+    modalItem.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem) {
+      modalItem.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem = document.getElementById(modalId);
+    modalItem.style.display = 'block';
+  }
+  function alertCancel(processId){
+    show_modal('modal'+processId);
+    //alert('modal'+processId);
+  }
+
+
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function click_process(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+</script>
+{% endblock %}
+
+</html>

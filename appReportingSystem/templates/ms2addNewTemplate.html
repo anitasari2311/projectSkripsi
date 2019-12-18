@@ -1,0 +1,221 @@
+<html>
+<head>
+  <title> Add New Template </title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}
+   {% extends "NAVBARPROG.html" %}
+   {% set active_page = 'template' %}
+
+{% else %}
+
+    {% extends "NAVBARSPV.html" %}
+    {% set active_page = 'template' %}
+
+{% endif %}
+
+  
+{% block content %}
+<br><br>
+    <div class="judul"><center>INSERT TEMPLATE</center></div>
+
+<div class ="containInsert">
+    
+    {% if session.get('position') == 'Admin' %}
+      <div class="colBut">
+        <form action="/admin/template/copyTemplate"><button class="submit" style="width: 150px;">Copy Template</button></form>
+      </div>
+    {% else %}
+      <div class="colBut">
+        <form action="/spv/template/copyTemplate"><button class="submit" style="width: 150px;">Copy Template</button></form>
+      </div>
+    {% endif %}
+
+    <form id="myForm" action="/sendNewTemplate" autocomplete="off" method="POST">
+      
+      <div class ="row">
+        <div class ="col-35">
+          <label for="kodeReport">Kode Report</label>
+        </div>
+
+        <div class="col-55">
+          <input type="text" id="kodeLaporan2" name="kodeLaporan2" placeholder="Kode Laporan" style="width: 120px">
+          <select id="kategori" name="kategori" style="width: 235px">
+            {% for row in listKategori %}
+              <option value="{{row.Id}}">{{row.Name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-55">
+          <input type="text" id="kodeLaporan2" name="noLap" placeholder="Nomor Laporan" style="width: 120px">
+        </div>
+      </div>
+
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="organisasi">Organisasi</label>
+        </div>
+      
+        <div class="col-45">
+          <select id="organisasi" name="organisasi">
+            {% for row in listOrg %}
+              <option value="{{row.Id}}">{{row.Name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="server">Server</label>
+        </div>
+        
+        <div class="col-45">
+          <select id="server" name="server">
+            {% for row in listServer %}
+              <option value="{{row.serverId}}">{{row.serverName}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="namaReport">Nama Report</label>
+        </div>
+
+        <div class="col-85">
+          <input type="text" id="kodeReport" name="namaLaporan" style="text-transform: uppercase;" >
+        </div>
+      </div>
+      <br>
+
+      <div class="row">
+        <div class="col-35">
+          <label for="tujuan">Tujuan</label>
+        </div>
+
+        <div class="col-85">
+          <textarea rows="4" cols="50" id="tujuan" 
+          name="tujuan" ></textarea>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="filter">Filter</label>
+        </div>
+
+        <div class="col-85">
+          <textarea rows="4" cols="50" id="filter" name="filter"></textarea>
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="jmlKolom">Jumlah Kolom</label>
+        </div>
+
+        <div class="col-55">
+            <input type="number" class = "col-10" id="jmlKolom" name="jmlTampilan" style="width:120px; height: 35px;" min= "1"; max="25">
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="jmlHeader">Jumlah Header</label>
+        </div>
+
+        <div class="col-55">
+            <input type="number" class = "col-10" id="jmlHeader" name="jmlHeader" style="width:120px; height: 35px;" max="2">
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="jmlFooter">Jumlah Footer</label>
+        </div>
+
+        <div class="col-55">
+          <input type="number" class = "col-10" id="jmlFooter" name="jmlFooter" style="width:120px; height: 35px;" min= "0"; max="2">
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="periode">Periode</label>
+        </div>
+
+        <div class="col-55">
+          <input type="text" id="periode" name="periode" style="width: 120px">
+        </div>
+      </div>
+      <br>
+
+      <div class ="row">
+        <div class ="col-35">
+          <label for="printAll">Print All</label>
+        </div>
+
+        <div class="col-55">
+          <select id="printAll" name="printAll" style="width: 120px">
+            <option value="Y">Y</option>
+            <option value="N">N</option>
+        </select>
+        </div>
+      </div>
+    <br><br><br><br>
+
+    <center>
+      <div class="colBut">
+        <button class="submit" type="Submit">Next</button>
+      </div>
+     </form>
+
+      <div class="colBut">
+        <input type="button" class="submitRed" onclick="myFunction()" value="Reset">
+      </div>
+
+      {% if session.get('position') == 'Admin' %}
+        <div class="colBut">
+          <form action="/admin/home">
+            <button class="submitRed">Exit</button>
+          </form>
+        </div>
+      {% else %}
+        <div class="colBut">
+          <form action="/spv/home">
+            <button class="submitRed">Exit</button>
+          </form>
+        </div>
+      {% endif %}
+      
+    </center>
+
+    {% endblock %}
+</body>
+</html>
+
+
+{% block script %}
+<script>
+  /*                      RESET INPUTAN                     */
+function myFunction() {
+  document.getElementById("myForm").reset();
+}
+</script>
+
+{% endblock%}

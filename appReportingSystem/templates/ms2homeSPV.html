@@ -1,0 +1,101 @@
+<html>
+<head>
+  <title> Menu </title>
+  <link rel="stylesheet" 
+  href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body bgcolor="#F0FFF0"> 
+
+  {%extends "NAVBARSPV.html"%}
+  {%set active_page="home"%} 
+
+{%block content %}
+
+<br><br><br>
+<h3><p align="Right">{{day}}, <span  id="time" align="Left"> </span></p></h3>
+<h2><p align="Right"> Welcome, {{session['username']}}</p></h2>
+
+<br><br><br>
+
+<center>
+  <div class="card" style="display: inline-block; width: 300px; ">
+    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+    <div class="containerCard">
+      <h4><b>Profile</b></h4> 
+      <p>{{session['user_id']}}</p>
+      <p>{{session['username']}}</p> 
+    </div>
+  </div>
+
+  <div class="card" style="display: inline-block;">
+    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+    <div class="containerCard">
+      <h4><b>Ongoing Task(s)</b></h4> 
+      {% for i in listTask %}
+      <p>{{i['requestId']}}</p> 
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card" style="display: inline-block;">
+    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+    <div class="containerCard">
+      <h4><b>Total On Progress Task(s)</b></h4> 
+      <p>There are <b>{{onProgress}}</b> on progress task(s).</p>
+    </div>
+  </div>
+
+  <div class="card" style="display: inline-block;">
+    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+    <div class="containerCard">
+      <h4><b>Total Finished</b></h4> 
+      <p>You have finished <b>{{count}}</b> task(s).</p>
+      <p style="color: white;">dhsfvbdshfbdsfbhsdfsdfh</p>
+    </div>
+  </div>
+</center>
+
+
+{%endblock%}
+
+{%block script%}
+<script>
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";  
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}    
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+  setTimeout(showSlides, 2000); // Change image every 2 seconds
+}
+
+var span = document.getElementById('time');
+
+function time() {
+  var d = new Date();
+  var s = d.getSeconds();
+  var m = d.getMinutes();
+  var h = d.getHours();
+  span.textContent = h + ":" + m + ":" + s;
+}
+
+setInterval(time, 1000);
+</script>
+
+
+
+</body>
+</html>
+{%endblock%}

@@ -1,0 +1,5 @@
+pip install flask
+pip install pandas
+pip install xlsxwriter
+pip install xlrd
+pip install mysql.connector

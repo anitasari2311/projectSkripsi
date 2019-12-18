@@ -1,0 +1,130 @@
+<html>
+<head>
+  <title> Add New Server </title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body bgcolor="#F0FFF0">
+
+
+   {% extends "NAVBARSPV.html" %}
+   {% set active_page = 'setting' %}
+
+  
+{% block content %}
+<br><br>
+<div class="judul"><center>INSERT SERVER</center></div>
+
+  <div class ="containInsert">
+    <br>
+    
+    <form id="myForm" action="/sendDataServer" autocomplete="off" method="POST">
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="server">Id Server : </label>
+      </div>
+        
+      <div class="col-45">
+        <input type="text" id="idServer" name="idServer">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="server">Nama Server : </label>
+      </div>
+    
+      <div class="col-45">
+        <input type="text" id="namaServer" name="namaServer" style="text-transform: uppercase;">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="server">Login Name : </label>
+      </div>
+        
+      <div class="col-45">
+        <input type="text" id="loginName" name="loginName">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="server">Password : </label>
+      </div>
+        
+      <div class="col-45">
+        <input type="text" id="password" name="password">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="server">Host : </label>
+      </div>
+        
+      <div class="col-45">
+        <input type="text" id="host" name="host">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="server">Port : </label>
+      </div>
+        
+      <div class="col-45">
+        <input type="text" id="port" name="port">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="server">Jenis : </label>
+      </div>
+    
+      <div class="col-15">
+        <select name="jenis" style="width: 150px;">
+          <option name="jenis">SQL Server</option>
+          <option name="jenis">MySQL</option>
+        </select>
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="serverYN">Aktif : </label>
+      </div>
+    
+      <div class="col-15">
+        <select name="aktifYN" style="width: 150px;">
+          <option name="aktifYN">Y</option>
+          <option name="aktifYN">N</option>
+        </select>
+      </div>
+    </div>
+    
+      <br><br><br><br>
+
+    <center>
+      <div class="colBut">
+        <button class="submit" type="Submit">Save</button>
+      </div>
+     </form>
+
+     <div class="colBut"><form action="/spv/setting/server/edit">
+       <button class="submit">Edit Server</button></form>
+     </div>
+
+      <div class="colBut"><form action="/spv/home">
+        <button class="submitRed">Cancel</button></form>
+      </div>
+
+    </center>
+  </div> <!-- DIV CONTAIN INSERT -->
+
+    {% endblock %}
+</body>
+</html>

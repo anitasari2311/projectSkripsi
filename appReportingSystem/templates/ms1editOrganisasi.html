@@ -1,0 +1,116 @@
+<html>
+<head>
+  <title>Edit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styleUser.css') }}">
+</head>
+<body bgcolor="F0FFF0">
+
+{% extends "NAVBARSPV.html" %}
+{% set active_page = 'setting' %}
+
+{% block content %}
+<br><br>
+
+<div class="judul"><center>EDIT ORGANISASI</center></div>
+
+{% if detailOrganisasi %}
+  <div class ="containInsert">
+    <br><br><br>
+    
+    <form id="myForm" action="/sendDataOrganisasi" autocomplete="off" method="POST">
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="organisasi">Id Organisasi : </label>
+      </div>
+        
+      <div class="col-45">
+        <input type="text" id="idOrg" name="idOrg" value="{{detailOrganisasi[0].org_id}}">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="organisasi">Nama Organisasi : </label>
+      </div>
+    
+      <div class="col-45">
+        <input type="text" id="namaOrg" name="namaOrg" style="text-transform: uppercase;" value="{{detailOrganisasi[0].org_name}}">
+      </div>
+    </div>
+
+    <div class ="row">
+      <div class ="col-35">
+        <label for="organisasi">Aktif : </label>
+      </div>
+    
+      <div class="col-15">
+        {% if detailOrganisasi[0].org_aktifYN == 'Y' %}
+          <select name="aktifYN">
+            <option name="aktifYN">{{detailOrganisasi[0].org_aktifYN}}</option>
+            <option name="aktifYN">N</option>
+          </select>
+        {% else %}
+          <select name="aktifYN">
+            <option name="aktifYN">{{detailOrganisasi[0].org_aktifYN}}</option>
+            <option name="aktifYN">Y</option>
+          </select>
+        {% endif %}
+      </div>
+    </div>
+    
+      <br><br><br><br>
+
+    <center>
+      <div class="colBut">
+        <button class="submit" type="Submit">Save</button>
+      </div>
+     </form>
+
+      <div class="colBut"><form action="/spv/home">
+        <button class="submitRed">Cancel</button></form>
+      </div>
+
+    </center>
+  </div>
+
+
+{% else %}
+  <center>
+
+
+<div class="containEdit">
+          <div class="row" style="display: block;">
+              <div class="tulisan" style="width: 350px; text-align: left">
+                <label for="reportCode">Id Organisasi :</label>
+
+                <form action= "/spv/setting/organisasi/edit" method = 'POST'>
+                  <input name="kodeOrganisasi" list="kodeReport" required>
+                  <br><br><br>
+
+                  <datalist id="kodeReport">
+                    {% for row in listIdOrganisasi %}
+                      <option value="{{row['Id']}}">{{row['Nama']}}
+                    {% endfor %}
+                  </datalist>
+           </div>
+         </option>
+  <center>
+              <div class="colBut">
+                <button id="tombolSubmit" class="submit" value="edit" type="submit">Submit</button></div>
+                  </form>
+
+              <div class="colBut">
+                  <form action="/spv/home">
+                    <button class="submitRed" >Cancel</button></div></form>
+
+
+ </center>
+</div>
+ 
+</center>
+{% endif %}
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<title>History Task</title>
+</head>
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}  
+		{% extends "NAVBARPROG.html" %}
+    {% set active_page = 'task' %}
+{% else %}
+    {% extends "NAVBARSPV.html" %}
+    {% set active_page = 'task' %}
+  
+{% endif %}
+    
+{% block content %}
+<br><br>
+	<div class="judul">
+		<center>HISTORY TASK</center>
+	</div>
+
+
+{% if historyTask %}
+
+
+
+         <table id="list">
+                  <tr>
+                    <th>Request Code</th>
+                    <th>Report Title</th>
+                    <th>Request Name</th>
+                    <th>Department</th>
+                    <th>Request Date</th>
+                    <th>Finished Date</th>
+                    <th>Report Code </th>
+                    
+                  
+                  </tr>
+                  {% for row in historyTask %}
+                  
+                    <tr >
+                      <td>{{row['requestId']}}</td>
+                      <td>{{row['requestJudul']}}</td>
+                      <td>{{row['userName']}}</td>
+                      <td>{{row['requestKategori']}}</td>
+                      <td>{{row['requestTanggal']}}</td>
+                      <td>{{row['requestEndDate']}}</td>   
+                      <td>{{row['requestKodeLaporan']}}</td>
+                      
+                      
+                    </tr>
+                  
+                  {% endfor %}
+                 
+          </table>
+
+{% else %}
+
+<center><p> Tidak ada history task </p></center>
+{% endif %}
+
+{% endblock %}
+</body>
+</html>
