@@ -45,6 +45,15 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-25">
+                <label for="posisi">Position</label>
+            </div>
+  
+            <div class="col-75">
+                <input type="text" placeholder="{{profileUser[0].userPosisi}}" id="posisi" name="posisi" disabled="">
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-25">
@@ -53,16 +62,6 @@
 
             <div class="col-75">
                 <input type="text" placeholder="{{profileUser[0].userName}}" id="name" name="name" disabled="">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-25">
-                <label for="posisi">Position</label>
-            </div>
-
-            <div class="col-75">
-                <input type="text" placeholder="{{profileUser[0].userPosisi}}" id="posisi" name="posisi" disabled="">
             </div>
         </div>
 
@@ -80,18 +79,24 @@
 {% endif %}
 
         <center>
-          <div class="colBut"><form action="/tesEditProfile">
-            <button class="submit" id="editProfile">Edit Profile</button><br></div></form>
-              
           {% if session.get('position') == 'User' %}
+            <div class="colBut"><form action="/user/profile/edit">
+              <button class="submit" id="editProfile">Edit Profile</button><br></div></form>
+                      
             <div class="colBut"><form action="/user/account">
               <button class="submit" style="width: 150px;">Change Password</button>
             </form></div>
           {% elif session.get('position') == 'Admin' %}
+            <div class="colBut"><form action="/user/profile/edit">
+              <button class="submit" id="editProfile">Edit Profile</button><br></div></form>
+
             <div class="colBut"><form action="/admin/account">
               <button class="submit" style="width: 150px;">Change Password</button>
             </form></div>
           {% else %}
+            <div class="colBut"><form action="/user/profile/edit">
+              <button class="submit" id="editProfile">Edit Profile</button><br></div></form>
+
             <div class="colBut"><form action="/spv/account">
               <button class="submit" style="width: 150px;">Change Password</button>
             </form></div>

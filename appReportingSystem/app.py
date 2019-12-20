@@ -12,9 +12,6 @@ import os
 # import pandas as pd
 
 
-
-
-
 app = Flask(__name__, static_folder='app/static')
 
 
@@ -168,6 +165,32 @@ def editProfileSPV():
 
     return render_template('ms1editProfile.html', profileUser = loadListReq)
 
+@app.route('/sendEditProfile', methods = ['GET', 'POST'])
+def sendEditProfile():
+    if request.method == 'POST':
+        uId = session['user_id']
+        namaUser = request.form['userName']
+        emailUser = request.form['userEmail']
+
+        profile_data = {
+            'uId' : uId,
+            'userNama' : namaUser,
+            'userEmail' : emailUser
+        }
+
+        dataProfile = json.dumps(profile_data)
+
+        if session.get('position') == 'User':
+            requests.post(micro1+'updateDataProfile/'+dataProfile)
+            return redirect(url_for('user'))
+        elif session.get('position') == 'Admin' :
+            requests.post(micro1+'updateDataProfile/'+dataProfile)
+            return redirect(url_for('admin'))
+        else:
+            requests.post(micro1+'updateDataProfile/'+dataProfile)
+            return redirect(url_for('spv'))
+
+
 @app.route('/sendDataPassword', methods=['GET', 'POST'])
 def sendDataPassword():
     if request.method == 'POST':
@@ -264,8 +287,6 @@ def listFinished():
         print("========================")
 
         return render_template('ms1listFinished.html', listKelar = loadFinished)
-
-
 @app.route('/downloadRequest',methods=['POST','GET'])
 def downloadRequest():
     if request.method == 'POST':
@@ -314,23 +335,6 @@ def readReport():
         print("======================")
         return render_template('ms4viewReport.html', readReport = loadListReport)
 
-@app.route('/user/list/testReadReport', methods=['POST', 'GET'])
-def testReadReport():
-
-    listReportId = requests.get(micro4+'viewReportId')
-    listReportIdResp = json.dumps(listReportId.json())
-    loadListReportId = json.loads(listReportIdResp)
-
-    if request.method == 'POST':
-        kode_laporan = request.form['kodeLaporan']
-
-        listRep         = requests.get(micro4+'viewReport/'+kode_laporan)
-        listResp        = json.dumps(listRep.json())
-        loadListReport  = json.loads(listResp)
-
-        return render_template('selectReport.html', readReport = loadListReport)
-
-    return render_template('selectReport.html', reportId = loadListReportId)
 #================[Saat user memberi rating]=================
 @app.route('/sendRating', methods=['POST','GET'])
 def sendRating():
@@ -416,7 +420,7 @@ def sendDataRequest():
             return redirect(url_for('newRequest'))
         else:
         
-        
+            
             getFileName = requests.get(micro1+'generateRequestId')
             fiName      = json.dumps(getFileName.json())
             resName     = json.loads(fiName)
@@ -427,10 +431,13 @@ def sendDataRequest():
             # print(fileName)
 
             # fileName = secure_filename(file.filename)
+            
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], fileName+'.jpg'))
+
             
-            
-            
+            checkSize = os.stat(app.config['UPLOAD_FOLDER']+'/'+fileName+'.jpg').st_size
+            if checkSize == 0:
+                os.remove(app.config['UPLOAD_FOLDER']+'/'+fileName+'.jpg')
             
             if 'file' not in request.files:
                 fileName = ''
@@ -747,67 +754,75 @@ def sendEditRequest():
 @app.route('/spv/task/available')
 def listRequestSPV():
     # sessionId = session['user_id']
-    if session.get('user_id') is None:
-        return render_template('ms1login.html')
-    else:
-        listAvailableTask   = requests.get(micro1+'availableTask')
-        avTask              = json.dumps(listAvailableTask.json())
-        loadAvailTask       = json.loads(avTask)
 
-        # listTask = requests.get(micro1+'listTask/'+sessionId)
-        # Task = json.dumps(listTask.json())
-        # loadTask = json.loads(Task)
-        print("=== [ availableTaskSPV ] ===")
-        print('ID   : ',session['user_id']),print('Name : ',session['username'])
-        print('Time : ',datetime.datetime.now().strftime('%X'))
-        print("============================")
+    listAvailableTask   = requests.get(micro1+'availableTask')
+    avTask              = json.dumps(listAvailableTask.json())
+    loadAvailTask       = json.loads(avTask)
 
-        return render_template('ms1availableTaskSPV.html', listAvailTaskSPV = loadAvailTask)
+    # listTask = requests.get(micro1+'listTask/'+sessionId)
+    # Task = json.dumps(listTask.json())
+    # loadTask = json.loads(Task)
+    print("=== [ availableTaskSPV ] ===")
+    print('ID   : ',session['user_id']),print('Name : ',session['username'])
+    print('Time : ',datetime.datetime.now().strftime('%X'))
+    print("============================")
+
+    return render_template('ms1availableTaskSPV.html', listAvailTaskSPV = loadAvailTask)
                             # listTask = loadTask)
 
 
 @app.route('/spv/task/onProgress')
 def onProgressTask():
-    if session.get('user_id') is None:
-        return render_template('ms1login.html')
-    else:
-        onProgTask      = requests.get(micro1+'onProgressTask')
-        onTask          = json.dumps(onProgTask.json())
-        loadOnProgTask  = json.loads(onTask)
 
-        print("=== [ onProgressTask ] ===")
-        print('ID   : ',session['user_id']),print('Name : ',session['username'])
-        print('Time : ',datetime.datetime.now().strftime('%X'))
-        print("==========================")
-        return render_template('ms1onProgressTaskSPV.html', onProgTask = loadOnProgTask)
+    onProgTask      = requests.get(micro1+'onProgressTask')
+    onTask          = json.dumps(onProgTask.json())
+    loadOnProgTask  = json.loads(onTask)
+
+    print("=== [ onProgressTask ] ===")
+    print('ID   : ',session['user_id']),print('Name : ',session['username'])
+    print('Time : ',datetime.datetime.now().strftime('%X'))
+    print("==========================")
+    return render_template('ms1onProgressTaskSPV.html', onProgTask = loadOnProgTask)
 
 @app.route('/spv/home')
 def spv():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
-        sessionId = session['user_id']
+        now         = datetime.datetime.now()
 
-        listTask    = requests.get(micro1+'listTask/'+sessionId)
-        Task        = json.dumps(listTask.json())
-        loadTask    = json.loads(Task)
+        day         = now.strftime("%A")
+        clock       = now.strftime("%H:%M:%S")
+        sessionId   = session['user_id']
 
-        countP       = requests.get(micro1+'countOnProgressTask')
-        Count        = json.dumps(countP.json())
-        loadCountP   = json.loads(Count)
-        loadCountP   = str(loadCountP).replace("[","").replace("]","")
+        listTask            = requests.get(micro1+'countOngoingTask/'+sessionId)
+        Task                = json.dumps(listTask.json())
+        loadOngoingTask     = json.loads(Task)
+        loadOngoingTask     = str(loadOngoingTask).replace("[","").replace("]","")
 
-        countF       = requests.get(micro1+'countFinishedTask/'+sessionId)
-        Count        = json.dumps(countF.json())
-        loadCountF   = json.loads(Count)
-        loadCountF   = str(loadCountF).replace("[","").replace("]","")
+        countF      = requests.get(micro1+'countFinishedTask/'+sessionId)
+        Count       = json.dumps(countF.json())
+        loadCount   = json.loads(Count)
+        loadCount   = str(loadCount).replace("[","").replace("]","")
 
-        print("=== [ homeSPV ] ===")
-        print('ID   : ',session['user_id']),print('Name : ',session['username'])
-        print('Time : ',datetime.datetime.now().strftime('%X'))
-        print("==========================")
+        countSch        = requests.get(micro3+'countScheduleToday')
+        countSched      = json.dumps(countSch.json())
+        loadRunSched    = json.loads(countSched)
 
-        return render_template('ms2homeSPV.html', listTask = loadTask, onProgress = loadCountP, count = loadCountF)
+        getKodeToday    = requests.get(micro2+'countReportToday')
+        kodeTodayResp   = json.dumps(getKodeToday.json())
+        loadToday       = json.loads(kodeTodayResp)
+
+        avaTask     = requests.get(micro1+'countAvailableTask')
+        resAva      = json.dumps(avaTask.json())
+        loadAvail   = json.loads(resAva)
+    print("=== [ homeSPV ] ===")
+    print('ID   : ',session['user_id']),print('Name : ',session['username'])
+    print('Time : ',datetime.datetime.now().strftime('%X'))
+    print("==========================")
+    return render_template('ms2homeSPV.html',OngoingTask = loadOngoingTask, 
+                                count=loadCount, runSched = loadRunSched, reportToday = loadToday, 
+                                availTask= loadAvail)
 
 @app.route('/spv/task/list')
 def listTaskSPV():
@@ -915,6 +930,8 @@ def undoPrioritasRequest():
         return redirect(url_for('listRequestSPV'))
 
 
+
+
 #=========================================================================================
 #=========================================================================================
 #=========================[         PROGRAMMER             ]==============================
@@ -927,27 +944,42 @@ def admin():
     if session.get('user_id') is None:
         return render_template('ms1login.html')
     else:
-        now = datetime.datetime.now()
+        now         = datetime.datetime.now()
 
-        day = now.strftime("%A")
-        clock = now.strftime("%H:%M:%S")
-        sessionId = session['user_id']
+        day         = now.strftime("%A")
+        clock       = now.strftime("%H:%M:%S")
+        sessionId   = session['user_id']
 
-        listTask    = requests.get(micro1+'listTask/'+sessionId)
-        Task        = json.dumps(listTask.json())
-        loadTask    = json.loads(Task)
+        listTask            = requests.get(micro1+'countOngoingTask/'+sessionId)
+        Task                = json.dumps(listTask.json())
+        loadOngoingTask     = json.loads(Task)
+        loadOngoingTask     = str(loadOngoingTask).replace("[","").replace("]","")
 
         countF      = requests.get(micro1+'countFinishedTask/'+sessionId)
         Count       = json.dumps(countF.json())
         loadCount   = json.loads(Count)
         loadCount   = str(loadCount).replace("[","").replace("]","")
 
+        countSch        = requests.get(micro3+'countScheduleToday')
+        countSched      = json.dumps(countSch.json())
+        loadRunSched    = json.loads(countSched)
+
+        getKodeToday    = requests.get(micro2+'countReportToday')
+        kodeTodayResp   = json.dumps(getKodeToday.json())
+        loadToday       = json.loads(kodeTodayResp)
+
+        avaTask     = requests.get(micro1+'countAvailableTask')
+        resAva      = json.dumps(avaTask.json())
+        loadAvail   = json.loads(resAva)
+
 
         print("=== [ homeAdmin ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
         print('Time : ',datetime.datetime.now().strftime('%X'))
         print("=====================")
-        return render_template('ms2home.html', day=day, clock=clock, listTask = loadTask, count=loadCount)
+        return render_template('ms2home.html', day=day, clock=clock, OngoingTask = loadOngoingTask, 
+                                count=loadCount, runSched = loadRunSched, reportToday = loadToday, 
+                                availTask= loadAvail)
 
 #============[Menampilkan list task yang bisa dikerjakan]============
 @app.route('/admin/task/available')
@@ -963,15 +995,9 @@ def availableTask():
         avTask              = json.dumps(listAvailableTask.json())
         loadAvailTask       = json.loads(avTask)
 
-
-        listReportId        = requests.get(micro1+'getReportId')
-        listReportIdResp    = json.dumps(listReportId.json())
-        loadListRep         = json.loads(listReportIdResp)
-
         detailNormal    = requests.get(micro1+'taskProgrammer/'+sessionId)
         detNormal       = json.dumps(detailNormal.json())
         loadTaskProg    = json.loads(detNormal)
-
 
         print("=== [ availableTask ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -979,7 +1005,7 @@ def availableTask():
         print("=========================")
 
         return render_template('ms1availableTask.html', listAvailTask = loadAvailTask,
-                                listKodeLap = loadListRep, taskProg = loadTaskProg)
+                                taskProg = loadTaskProg)
 
 
 @app.route('/admin/task/available/<request_id>',methods=['GET','POST'])
@@ -999,7 +1025,7 @@ def detailTask(request_id):
                     print(checkIm)
 
         namaImage = request_id+'.jpg'
-
+        print(checkIm)
         print(namaImage)
 
         # UNTUK MENGAMBIL VALUE DALAM JSON
@@ -1270,8 +1296,8 @@ def sendAddNewSchedule():
 
 
 
-        header      = request.form['header']
-        keterangan  = request.form['keterangan']
+        # header      = request.form['header']
+        # keterangan  = request.form['keterangan']
         note        = request.form['note']
         grouping    = request.form['grouping']
         org         = nmOrg
@@ -1341,8 +1367,8 @@ def sendAddNewSchedule():
 
         addS_data = {
         'report_id'         : kode_laporan,
-        'sch_header'        : header,
-        'sch_keterangan'    : keterangan,
+        # 'sch_header'        : header,
+        # 'sch_keterangan'    : keterangan,
         'sch_note'          : note,
         'sch_reportPIC'     : reportPIC,
         'sch_reportPen'     : reportPenerima,
@@ -1611,7 +1637,11 @@ def sendNewQuery():
         print("========================")
 
         flash('Insert Query : '+kode_laporan+' Success!')
-        return redirect(url_for('admin'))
+
+        if session['user_id'] == 'Admin':
+            return redirect(url_for('admin'))
+        elif session['user_id'] == 'Atasan':
+            return redirect(url_for('spv'))
 
 #============[Memilih kode laporan yang akan diubah querynya]============
 #============[Menampilkan menu insert Query]============
@@ -1687,7 +1717,10 @@ def editQuery2(report_id):
         print("========================")
 
         flash('Insert Query : '+report_id+' Success!')
-        return redirect(url_for('admin'))        
+        if session['user_id'] == 'Admin':
+            return redirect(url_for('admin'))
+        elif session['user_id'] == 'Atasan':
+            return redirect(url_for('spv'))        
 
 
 
@@ -2386,7 +2419,7 @@ def sendCopyTemplate():
 
 @app.route('/admin/schedule/run', methods=['POST','GET'])
 def runSchedule():
-    getKodeToday    = requests.get(micro2+'getKodeReportRunToday')
+    getKodeToday    = requests.get(micro2+'getKodeReportRunAll')
     kodeTodayResp   = json.dumps(getKodeToday.json())
     loadKodeToday   = json.loads(kodeTodayResp)
 
@@ -2425,7 +2458,21 @@ def reRun():
     if request.method == 'POST':
         kode_laporan = request.form['kodLap']
 
-        requests.get(micro3+'runSchedule/'+kode_laporan)
+        requests.get(micro3+'executeSchedule/'+kode_laporan)
+
+        print("=== [ reRun ] ===")
+        print('ID   : ',session['user_id']),print('Name : ',session['username'])
+        print('Time : ',datetime.datetime.now().strftime('%X'))
+        print("=================")
+
+        return redirect(url_for('runSchedule'))
+
+@app.route('/runScheduleNow', methods=['POST'])
+def runScheduleNow():
+    if request.method == 'POST':
+        kode_laporan = request.form['kodLapRun']
+
+        requests.get(micro3+'executeSchedule/'+kode_laporan)
 
         print("=== [ reRun ] ===")
         print('ID   : ',session['user_id']),print('Name : ',session['username'])
@@ -2796,6 +2843,18 @@ def testJSON():
 
     return  'OK'
 
+
+
+
+@app.route('/testBlockchain', methods=['GET','POST'])
+def testBlockchain():
+    if request.method == 'POST':
+
+        requests.post('http://202.58.163.25/blockchain/?chain=default', data='getnewaddress')
+
+
+        return 'ADDRESS CREATED'
+    return render_template('blockchain.html')
 
 if __name__ == "__main__":
     # website_url = 'reportingsystem.pharos:5000'

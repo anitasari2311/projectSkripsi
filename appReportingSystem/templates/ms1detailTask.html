@@ -231,11 +231,11 @@
             {% if detail_task['progId'] == '' or detail_task['progId'] is none %}
 
             
-              <div class="colBut">
-                <form action ="/admin/task/available/{{detail_task['requestId']}}" method = "post">
-                <button class="submit" value="{{detail_task['requestId']}}" name="btnConfirmReq" >Accept</button></form></div>
-              
-              {% if session.get('position') == 'Admin' %}
+            <div class="colBut">
+              <form action ="/admin/task/available/{{detail_task['requestId']}}" method = "post">
+              <button class="submit" value="{{detail_task['requestId']}}" name="btnConfirmReq" >Accept</button></form></div>
+            
+            {% if session.get('position') == 'Admin' %}
               <div class="colBut"><form action ="/admin/task/available">
                 <button class="submitRed" value="Cancel">Cancel</button></form></div>
               {% else %}

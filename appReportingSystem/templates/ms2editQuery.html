@@ -28,7 +28,7 @@
 {% if session.get('position') == 'Admin' %}
   <div class="containEdit">
     <div class="tulisan" style="width: 350px; text-align: left;">
-      <label for="kodLap"> Template:  </label>
+      <label for="kodLap"> Template</label>
       <form action="/admin/query/edit" autocomplete="off" method = "POST">
         <input name="kodLap" list="report">
         <datalist id= "report" name= "kodLap">

@@ -27,8 +27,12 @@ def getNamaFile(kode_laporan):
 		db 		= databaseCMS.db_readReport()
 		cursor 	= db.cursor()
 
-		cursor.execute('SELECT namaFile from readreport WHERE report_id = "'+kode_laporan+'"')
-
+		# cursor.execute('SELECT namaFile from readreport WHERE report_id = "'+kode_laporan+'"')
+		cursor.execute(' SELECT namaFile\
+						FROM readreport a WHERE \
+						report_lastProcess in (SELECT max(b.report_lastProcess)\
+						FROM readreport b WHERE a.report_id = b.report_id)\
+						AND report_id = "'+kode_laporan+'"  ')
 		result = cursor.fetchone()
 		print(result)
 		return json.dumps(result)
@@ -61,13 +65,17 @@ def updateReport(dataMS4):
 		try:
 			db = databaseCMS.db_readReport()
 			cursor = db.cursor()
+			# cursor.execute("INSERT INTO readreport (report_id, report_judul, org_id, namaFile,\
+			  #                            report_lastProcess, read_PIC, read_Penerima)\
+			  #                            VALUES(%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE\
+			  #                            report_judul='"+report_judul+"', org_id='"+org_id+"',\
+			  #                            namaFile='"+namaFile+"', report_lastProcess='"+str(lastProc)+"',\
+			  #                            read_PIC = '"+str(PIC)+"', read_Penerima='"+str(Pen)+"' ",(kode_laporan, report_judul,\
+			  #                               org_id, namaFile, str(lastProc), str(PIC), str(Pen)))
 			cursor.execute("INSERT INTO readreport (report_id, report_judul, org_id, namaFile,\
-	                             report_lastProcess, read_PIC, read_Penerima)\
-	                             VALUES(%s,%s,%s,%s,%s,%s,%s) ON DUPLICATE KEY UPDATE\
-	                             report_judul='"+report_judul+"', org_id='"+org_id+"',\
-	                             namaFile='"+namaFile+"', report_lastProcess='"+str(lastProc)+"',\
-	                             read_PIC = '"+str(PIC)+"', read_Penerima='"+str(Pen)+"' ",(kode_laporan, report_judul,\
-	                                org_id, namaFile, str(lastProc), str(PIC), str(Pen)))
+			             report_lastProcess, read_PIC, read_Penerima)\
+			             VALUES(%s,%s,%s,%s,%s,%s,%s)",(kode_laporan, report_judul,\
+			                org_id, namaFile, str(lastProc), str(PIC), str(Pen)))
 			db.commit()
 		except Error as e :
 		            print("Error while connecting file MySQL", e)
@@ -79,39 +87,10 @@ def updateReport(dataMS4):
 		            print("MySQL connection is closed")
 
 
-@app.route('/viewReportId')
-def viewReportId():
-	try:
-		db = databaseCMS.db_readReport()
-		cursor = db.cursor()
-
-		cursor.execute('SELECT LEFT(report_id, 3) FROM readreport ')
-
-		listReportId = cursor.fetchall()
-
-		LR = []
-
-		for row in listReportId:
-			listDict={
-			'reportId' 		: row[0]
-			}
-			LR.append(listDict)
-
-		result = json.dumps(LR)
-
-		return result
-
-	except Error as e :
-		print("Error while connecting file MySQL", e)
-	finally:
-	#Closing DB Connection.
-		if(db.is_connected()):
-		        cursor.close()
-		        db.close()
-		print("MySQL connection is closed")	
 
 
 
+#User selain Direksi
 @app.route('/viewReport/<email>', methods=['POST','GET'])
 def viewReport(email):
 	try:
@@ -119,8 +98,12 @@ def viewReport(email):
 		cursor = db.cursor()
 
 		cursor.execute('SELECT report_id, org_id, report_judul,namaFile, report_lastProcess\
-		                FROM readreport WHERE read_PIC\
-		                LIKE "%'+email+'%" OR read_penerima LIKE "%'+email+'%" ')
+						FROM readreport a WHERE \
+						report_lastProcess in (SELECT max(b.report_lastProcess)\
+						FROM readreport b WHERE a.report_id = b.report_id)\
+						AND (read_PIC\
+						LIKE "%'+email+'%" OR read_penerima LIKE "%'+email+'%") ')
+
 
 		listReport = cursor.fetchall()
 
@@ -158,49 +141,6 @@ def viewReport(email):
 		        db.close()
 		print("MySQL connection is closed")
 
-@app.route('/viewAllReport/<kode_laporan>', methods=['POST','GET'])
-def viewAllReport(kode_laporan):
-	try:
-		db = databaseCMS.db_readReport()
-		cursor = db.cursor()
-
-		cursor.execute('SELECT report_id, org_id, report_judul,namaFile, report_lastProcess\
-		                FROM readreport WHERE report_id LIKE "%kode_laporan%"\
-		                ORDER BY report_lastProcess desc ')
-
-		listReport = cursor.fetchall()
-
-		LR = []
-
-		for row in listReport:
-			a = requests.get('http://127.0.0.1:5001/getNamaOrg/'+str(row[1]))
-			b = json.dumps(a.json())
-			c = json.loads(b)
-			for x in c:
-				orgName = x['org_name']
-
-			listDict={
-			'reportId' 		: row[0],
-			'orgName' 		: orgName,
-			'orgId' 		: row[1],
-			'reportJudul' 	: row[2],
-			'namaFile' 		: row[3],
-			'reportLastProc': row[4]
-			}
-			LR.append(listDict)
-
-		result = json.dumps(LR)
-
-		return result
-
-	except Error as e :
-		print("Error while connecting file MySQL", e)
-	finally:
-	#Closing DB Connection.
-		if(db.is_connected()):
-		        cursor.close()
-		        db.close()
-		print("MySQL connection is closed")
 
 @app.route('/readNow/<sessId>/<sessName>', methods=['POST','GET'])
 def readNow(sessId,sessName):

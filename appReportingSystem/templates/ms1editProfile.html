@@ -32,10 +32,8 @@
         <center> PROFILE </center>
     </div> 
 
-
-    <form action="/sendDataPassword", method="POST">
-
   {% if profileUser %}
+    <form action="/sendEditProfile", method="POST">
     <div class="containModify">
         <br>
         <div class ="row">
@@ -48,34 +46,33 @@
             </div>
         </div>
 
-
         <div class="row">
             <div class="col-25">
-                <label for="name">Name</label>
+                <label for="userPosisi">Position</label>
             </div>
 
             <div class="col-75">
-                <input type="text" value="{{profileUser[0].userName}}" id="name" name="name">
+                <input type="text" value="{{profileUser[0].userPosisi}}" id="posisi" name="userPosisi" disabled="">
             </div>
         </div>
 
         <div class="row">
             <div class="col-25">
-                <label for="posisi">Position</label>
+                <label for="userName">Name</label>
             </div>
 
             <div class="col-75">
-                <input type="text" value="{{profileUser[0].userPosisi}}" id="posisi" name="posisi">
+                <input type="text" value="{{profileUser[0].userName}}" id="name" name="userName">
             </div>
         </div>
 
         <div class="row">
             <div class="col-25">
-                <label for="email">Email</label>
+                <label for="userEmail">Email</label>
             </div>
 
             <div class="col-75">
-                <input type="text" value="{{profileUser[0].userEmail}}" id="email" name="email">
+                <input type="text" value="{{profileUser[0].userEmail}}" id="email" name="userEmail">
             </div>
         </div>
 
@@ -84,7 +81,7 @@
 
         <center>
           <div class="colBut">
-            <button class="submit" id="editProfile" onclick="validasi()">Save Profile</button><br></div></form>
+            <button class="submit" id="editProfile">Save Profile</button><br></div></form>
           
           {% if session.get('position') == 'User' %}
             <div class="colBut"><form action="/user/profile">

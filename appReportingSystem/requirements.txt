@@ -1,5 +1,9 @@
-pip install flask
-pip install pandas
-pip install xlsxwriter
-pip install xlrd
-pip install mysql.connector
+PyMySQL==0.9.3
+pyodbc==4.0.27
+Flask_APScheduler==1.11.0
+requests==2.22.0
+Werkzeug==0.15.6
+pandas==0.25.3
+XlsxWriter==1.2.1
+Flask==1.1.1
+mysql_connector_repackaged==0.3.1

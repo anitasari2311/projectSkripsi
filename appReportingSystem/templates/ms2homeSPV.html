@@ -12,50 +12,48 @@
 
 {%block content %}
 
-<br><br><br>
-<h3><p align="Right">{{day}}, <span  id="time" align="Left"> </span></p></h3>
-<h2><p align="Right"> Welcome, {{session['username']}}</p></h2>
-
-<br><br><br>
-
+<br><br><br><br><br><br>
 <center>
-  <div class="card" style="display: inline-block; width: 300px; ">
-    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+  <div class="card" onclick="window.location.href='{{ url_for( 'listRequestSPV')}}';" style="background-color: #d3f4ff;">
     <div class="containerCard">
-      <h4><b>Profile</b></h4> 
-      <p>{{session['user_id']}}</p>
-      <p>{{session['username']}}</p> 
+      <h4><b>Available Task(s)</b></h4> 
+      <hr>
+      <p>{{availTask['data']['normal']}} Normal</p> 
+      <p>{{availTask['data']['important']}} Important</p> 
+      
     </div>
   </div>
 
-  <div class="card" style="display: inline-block;">
-    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+
+  <div class="card" onclick="window.location.href='{{ url_for( 'listTaskSPV')}}';" style="background-color: #d3f4ff;">
     <div class="containerCard">
       <h4><b>Ongoing Task(s)</b></h4> 
-      {% for i in listTask %}
-      <p>{{i['requestId']}}</p> 
-      {% endfor %}
+      <hr>
+      <p><b style="color: red;">{{OngoingTask}}</b> task(s) to be finished.</p> 
+      
     </div>
+
+
   </div>
 
-  <div class="card" style="display: inline-block;">
-    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
-    <div class="containerCard">
-      <h4><b>Total On Progress Task(s)</b></h4> 
-      <p>There are <b>{{onProgress}}</b> on progress task(s).</p>
-    </div>
-  </div>
-
-  <div class="card" style="display: inline-block;">
-    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+  <div class="card" onclick="window.location.href='{{ url_for( 'historyTaskSPV')}}';" style="background-color: #d3f4ff;">
     <div class="containerCard">
       <h4><b>Total Finished</b></h4> 
-      <p>You have finished <b>{{count}}</b> task(s).</p>
-      <p style="color: white;">dhsfvbdshfbdsfbhsdfsdfh</p>
+      <hr>
+      <p>You have finished <b>{{count}}</b> task(s).</p> 
+    </div>
+  </div>
+
+  <div class="card" onclick="window.location.href='{{ url_for( 'runScheduleSPV')}}';" style="background-color: #d3f4ff;">
+    <div class="containerCard">
+      <h4><b>Schedule Today</b></h4> 
+      <hr>
+      <p>{{reportToday}} Report(s)</p>
+      <p>{{runSched['data']['successReport']}} Success</p> 
+      <p>{{runSched['data']['failedReport']}} Failed</p> 
     </div>
   </div>
 </center>
-
 
 {%endblock%}
 

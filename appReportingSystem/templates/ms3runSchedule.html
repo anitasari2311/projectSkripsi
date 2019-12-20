@@ -26,9 +26,11 @@
 
 <div class ="judul">
       <center>RUN SCHEDULE</center>
+      <br>
     </div>
               <h1>TODAY'S REPORT TO RUN</h1>
-                <table id="list">
+            <div class ="myBoxTask">
+                <table id="list" style="font-size: 12px;">
                   <tr >
                     <th style="background-color: #98AFC7;">Report Code</th>
                       <th style="background-color: #98AFC7;">Organization</th>
@@ -38,29 +40,47 @@
                               <th style="background-color: #98AFC7;">Months</th>
                                 <th style="background-color: #98AFC7;">Day</th>
                                   <th style="background-color: #98AFC7;">Date</th>
+                                    <th style="background-color: #98AFC7;">Priority</th>
+                                      <th style="background-color: #98AFC7;">Time</th>
                   </tr>
 
                 {% for row in kodeToday %}
-                  <tr>
+                  <tr id="{{row.reportId}}" onclick= "click_process3(this.id)" name="rerunButton" value="{{row.reportId}}">
 
                     <td>{{row.reportId}}</td>
-                      <td>{{row.org_id}} - {{row.orgNama}}</td>
-                        <td>{{row.ktgri_id}} - {{row.kateNama}}</td>
+                      <td><!--{{row.org_id}} --> {{row.orgNama}}</td>
+                        <td><!-- {{row.ktgri_id}} -  -->{{row.kateNama}}</td>
                           <td>{{row.namaPenerima}}</td>
-                            <td>{{row.server_id}}</td>
+                            <td><!-- {{row.server_id}} -->{{row.serNama}}</td>
                               <td>{{row.schBulan}}</td>
                                 <td>{{row.schHari}}</td>
                                   <td>{{row.schTanggal}}</td>
+                                    <td>{{row.prioritas}}</td>
+                                      <td>{{row.jam}}:00</td>
+
+                                      <div id="modal3{{row.reportId}}" class="modal">
+                                        <form action='/runScheduleNow' method='POST'>
+                                              <div class="modal-content">
+                                                <span class="close" onclick="closeModal3()">&times;</span>
+                                                <center>
+                                                <strong>Run Schedule {{row.reportId}}</strong>
+                                                <br><br><br>
+                                                <p>Run Schedule Now ?</p>
+                                              <!-- </center> -->
+                                                 <button name="kodLapRun" value ="{{row.reportId}}"> OK </button>
+                                              </div>
+                                        </form>
+                                      </div>
                     
                   </tr>
                 {% endfor %}
                  
                 </table>
-
-<br><br>
+            </div>
+<br><br><br>
 
           <h1>SUCCESS</h1>
-
+        <div class ="myBoxTask">
             <table id="list">
               <tr>
                 <th>Report Code</th>
@@ -76,20 +96,22 @@
                 {% if row.runStatus == 'B' %}
                   <tr >
                     <td>{{row.reportId}}</td>
-                      <td>{{row.orgId}} - {{row.orgNama}}</td>
-                        <td>{{row.ktgriId}} - {{row.kateNama}}</td>
+                      <td><!-- {{row.orgId}} -  -->{{row.orgNama}}</td>
+                        <td><!-- {{row.ktgriId}} -  -->{{row.kateNama}}</td>
                           <td>{{row.runDate}}</td>
                             <td>{{row.runStartTime}}</td>
                               <td>{{row.runEndTime}}</td>
-                                <td>{{row.serverId}}</td>
+                                <td>{{row.serNama}}</td>
                   </tr>
                 {% endif %}
               {% endfor %} 
             </table>
+        </div>
 
-<br><br>
+<br><br><br>
 
               <h1>FAILED TO RUN</h1>
+      <div class ="myBoxTask">
                 <table id="list">
                   <tr>
                     <th style="background-color: #F87217;">Report Code</th>
@@ -107,12 +129,12 @@
                     {% if row.runStatus == 'G' %}
                      <tr >
                         <td>{{row.reportId}}</td>
-                         <td>{{row.orgId}} - {{row.orgNama}}</td>
-                          <td>{{row.ktgriId}} - {{row.kateNama}}</td>
+                         <td><!-- {{row.orgId}} -  -->{{row.orgNama}}</td>
+                          <td><!-- {{row.ktgriId}} -  -->{{row.kateNama}}</td>
                               <td>{{row.runDate}}</td>
                                 <td>{{row.runStartTime}}</td>
                                   <td>{{row.runEndTime}}</td>
-                                    <td>{{row.serverId}}</td>
+                                    <td>{{row.serNama}}</td>
                                       <td>{{row.errorDesc}}</td>
                                         <td>
                                             <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="rerunButton" value="{{row.reportId}}">Run</button>
@@ -139,7 +161,7 @@
                     {% endif %}
                   {% endfor %}
                 </table>
-
+    </div>
 
 
 
@@ -154,6 +176,8 @@
     {% block script %}
 <script>
 
+
+  // RE RUN
   var btnProcess2;
   var modalItem2;
   // // When the user clicks on <span> (x), close the modal
@@ -172,6 +196,30 @@
   }
   function click_process(processId){
     show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+
+
+
+  // RUN SCHEDULE NOW
+  var btnProcess3;
+  var modalItem3;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal3() {
+    modalItem3.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem3) {
+      modalItem3.style.display = "none";
+    }
+  }
+  function show_modal3(modalId){
+    modalItem3 = document.getElementById(modalId);
+    modalItem3.style.display = 'block';
+  }
+  function click_process3(processId){
+    show_modal('modal3'+processId);
     //alert('modal'+processId);
   }
 </script>

@@ -11,43 +11,54 @@
     {% set active_page = 'home' %}
 
     {% block content %}
-    <br><br><br>
+    
 
-<!-- <h3><p align="Right">{{day}}, <span  id="time" align="Left"> </span></p></h3>
-<h2><p align="Right"> Welcome, {{session['username']}}</p></h2> -->
+
 
 <br><br><br><br><br><br>
-
-
 <center>
-  <div class="card" style="display: inline-block; width: 300px; ">
-    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+  <div class="card" onclick="window.location.href='{{ url_for( 'availableTask')}}';" style="background-color: #d3f4ff;">
     <div class="containerCard">
-      <h4><b>Profile</b></h4> 
-      <p>{{session['user_id']}}</p>
-      <p>{{session['username']}}</p> 
+      <h4><b>Available Task(s)</b></h4> 
+      <hr>
+      <p>{{availTask['data']['normal']}} Normal</p> 
+      <p>{{availTask['data']['important']}} Important</p> 
+      
     </div>
   </div>
 
-  <div class="card" style="display: inline-block;">
-    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+
+  <div class="card" onclick="window.location.href='{{ url_for( 'listTask')}}';" style="background-color: #d3f4ff;">
     <div class="containerCard">
       <h4><b>Ongoing Task(s)</b></h4> 
-      {% for i in listTask %}
-      <p>{{i['requestId']}}</p> 
-      {% endfor %}
+      <hr>
+      <p><b style="color: red;">{{OngoingTask}}</b> task(s) to be finished.</p> 
+      
+    </div>
+
+
+  </div>
+
+  <div class="card" onclick="window.location.href='{{ url_for( 'historyTask')}}';" style="background-color: #d3f4ff;">
+    <div class="containerCard">
+      <h4><b>Total Finished</b></h4> 
+      <hr>
+      <p>You have finished <b>{{count}}</b> task(s).</p> 
     </div>
   </div>
 
-  <div class="card" style="display: inline-block;">
-    <!-- <img src="img_avatar.png" alt="Avatar" style="width:100%"> -->
+  <div class="card" onclick="window.location.href='{{ url_for( 'runSchedule')}}';" style="background-color: #d3f4ff;">
     <div class="containerCard">
-      <h4><b>Total Finished</b></h4> 
-      <p>You have finished <b>{{count}}</b> task(s).</p>
-      <p style="color: white;">dhsfvbdshfbdsfbhsdfsdfh</p>
+      <h4><b>Schedule Today</b></h4> 
+      <hr>
+      <p>{{reportToday}} Report(s)</p>
+      <p>{{runSched['data']['successReport']}} Success</p> 
+      <p>{{runSched['data']['failedReport']}} Failed</p> 
     </div>
   </div>
 </center>
+
+
 
 
 <!-- <div class="slideshow-container">
@@ -76,25 +87,25 @@
 
 {% block script %}
 <script>
-var slideIndex = 0;
-showSlides();
+// var slideIndex = 0;
+// showSlides();
 
-function showSlides() {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
-  }
-  slideIndex++;
-  if (slideIndex > slides.length) {slideIndex = 1}    
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active";
-  setTimeout(showSlides, 2000); // Change image every 2 seconds
-}
+// function showSlides() {
+//   var i;
+//   var slides = document.getElementsByClassName("mySlides");
+//   var dots = document.getElementsByClassName("dot");
+//   for (i = 0; i < slides.length; i++) {
+//     slides[i].style.display = "none";  
+//   }
+//   slideIndex++;
+//   if (slideIndex > slides.length) {slideIndex = 1}    
+//   for (i = 0; i < dots.length; i++) {
+//     dots[i].className = dots[i].className.replace(" active", "");
+//   }
+//   slides[slideIndex-1].style.display = "block";  
+//   dots[slideIndex-1].className += " active";
+//   setTimeout(showSlides, 2000); // Change image every 2 seconds
+// }
 
 var span = document.getElementById('time');
 

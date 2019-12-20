@@ -18,6 +18,7 @@
   {% extends "NAVBARPROG.html" %}
   {% set active_page = 'account' %}
 
+
 {% else %}
   {% extends "NAVBARSPV.html" %}
   {% set active_page = 'account' %}
@@ -25,16 +26,16 @@
 {% endif %}
 
 {% block content %}
-<br>
+<br><br><<br>
 
 <div class ="judul">
-        <center> CHANGE PASSWORD </center>
+        <center> EDIT PROFILE </center>
     </div> 
 
 <center>
     <form action="/sendDataPassword", method="POST">
     <div class="containModify">
-        <br>
+        <br><br><br>
         <div class ="row">
             <div class ="col-25">
                 <label for="oldPass">Old Password</label>
@@ -66,7 +67,7 @@
             </div>
         </div>
 
-            <br><br><br>
+            <br><br><br><br><br><br>
 
 
         <center>
@@ -86,7 +87,6 @@
               <button class="submitRed">Cancel</button>
             </form></div>
           {% endif %}
-
         </center>
        </center>
     </div>

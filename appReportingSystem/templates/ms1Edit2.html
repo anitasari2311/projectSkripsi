@@ -375,12 +375,13 @@
 <!-- EDIT REPORT HOME -->
   <center>
 <div class="containEdit">
-          <div class="row" style="display: block;">
-              <div class="tulisan" style="width: 350px; text-align: left">
-                <label for="reportCode">Report Code :</label>
+           <div class="row" style="display: block;">
+              <!-- <div class="tulisan" style="width: 350px; text-align: left"> -->
+                <!-- <label for="reportCode">Report Code</label> -->
+                <br><br>
 
                 <form action= "/user/editReport" method = 'POST'>
-                  <input name="kodeLaporan" list="kodeReport" required>
+                  <input name="kodeLaporan" list="kodeReport" required style="width: 200px; height: 30px" placeholder="Report Code">
                   <br><br><br>
 
                   <datalist id="kodeReport">
@@ -388,23 +389,24 @@
                     <option value="{{row['ReportId']}}">{{row['ReportJudul']}}
                     {% endfor %}
                   </datalist>
-           </div>
+           <!-- </div> -->
          </option>
-  <center>
+    <br><br><br>
               <div class="colBut">
                 <button id="tombolSubmit" class="submit" value="edit" type="submit">Submit</button></div>
                   </form>
-
+<!-- 
               <div class="colBut">
                   <form action="/user/home">
-                    <button class="submitRed" >Cancel</button></div></form>
+                    <button class="submitRed" >Cancel</button>
+              </div></form> -->
 
   {% endif %}
 
- </center>
-</div>
  
-</center>
+</div>
+ </center>
+
 </body>
 </html>
 {% endblock %}

@@ -37,7 +37,9 @@
         </div>
       </div>
 
-          <div class ="row">
+
+
+          <!-- <div class ="row">
             <div class ="col-35">
               <label for="header">Header</label>
             </div>
@@ -54,6 +56,54 @@
 
             <div class="col-55">
               <textarea id="keterangan" name="keterangan"></textarea>
+            </div>
+          </div> -->
+
+          <div class ="row">
+            <div class ="col-35">
+              <label for="priority">Priority</label>
+            </div>
+
+            <div class="col-55">
+              <select name="prioritasSchedule">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+          </div>
+
+          <div class ="row">
+            <div class ="col-35">
+              <label for="priority">Time</label>
+            </div>
+
+            <div class="col-55">
+              <select name="jamSchedule">
+                <option value=""></option>
+                <option value="01">01:00</option>
+                <option value="02">02:00</option>
+                <option value="03">03:00</option>
+                <option value="04">04:00</option>
+                <option value="05">05:00</option>
+                <option value="06">06:00</option>
+                <option value="07">07:00</option>
+                <option value="08">08:00</option>
+                <option value="09">09:00</option>
+                <option value="10">10:00</option>
+                <option value="11">11:00</option>
+                <option value="12">12:00</option>
+                <option value="13">13:00</option>
+                <option value="14">14:00</option>
+                <option value="15">15:00</option>
+                <option value="16">16:00</option>
+                <option value="17">17:00</option>
+                <option value="18">18:00</option>
+                <option value="19">19:00</option>
+                <option value="20">20:00</option>
+                <option value="21">21:00</option>
+                <option value="22">22:00</option>
+              </select>
             </div>
           </div>
 
@@ -264,13 +314,13 @@
           
           {% if session.get('position') == 'Admin' %}
             <div class="colBut">   
-               <form action="/admin/home">
+               <form action="/admin">
                   <button class="submitRed">Cancel</button>
                </form>
             </div>
           {% else %}
             <div class="colBut">   
-               <form action="/spv/home">
+               <form action="/spv">
                   <button class="submitRed">Cancel</button>
                </form>
             </div>

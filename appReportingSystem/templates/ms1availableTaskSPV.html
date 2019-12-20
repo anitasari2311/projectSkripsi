@@ -21,6 +21,7 @@
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by request id.." title="Type in a name" style="width: 200px">
 
           <center>
+            <div class ="myBoxTask">
                           <table id="list">
                             <tr>
                               <th>Request Name</th>
@@ -86,6 +87,7 @@
                               {% endif %}  
                             {% endfor %}
                           </table> 
+                        </div>
 {% else %}
   <p><center>Tidak ada task normal yang tersedia</center></p>
 {% endif %}
@@ -93,7 +95,7 @@
   </center>
 
 <!-- BATAS TASK IMPORTANT -->
-<p><center>_________________________________________________________________________________________________</center></p>
+<hr>
 
 <div class="judul">
   <center>AVAILABLE NORMAL TASK</center>
@@ -104,6 +106,7 @@
 <input type="text" id="myInput1" onkeyup="myFunction()" placeholder="Search by request id.." title="Type in a name" style="width: 200px">
 
           <center>
+            <div class ="myBoxTask">
                           <table id="list">
                             <tr>
                               <th>Request Name</th>
@@ -192,6 +195,7 @@
                             </tr>
                             {% endfor %}
                           </table> 
+                        </div>
 {% else %}
   <p><center>Tidak ada task important yang tersedia</center></p>
 {% endif %}

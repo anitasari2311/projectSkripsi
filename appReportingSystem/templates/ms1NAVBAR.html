@@ -10,18 +10,18 @@
   <body bgcolor="#F0FFF0">
 
 <div id="myTopnav">
-  <div class="topnav"><ul>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <div>
-              {% for message in messages %}
-                <div id="successMessage" class="alert alert-primary alert-dismissible fade show" role="alert"
-              style="background-color: #4CAF50;height: 50px;font-size: 20px;font-weight: 750">
-                  <center><span style="color:white;">{{ message }}</span></center>
-                </div>
-              {% endfor %}
+<div class="topnav"><ul>
+          {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div id="successMessage" class="alert alert-primary alert-dismissible fade show" role="alert"
+            style="background-color: #4CAF50;height: 50px;font-size: 20px;font-weight: 750">
+                <center><span style="color:white;">{{ message }}</span></center>
             </div>
-          {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
         {% endwith %}
 
   <img src="/static/images/logoPharos.png" style="width: 100px; border: 0">
@@ -66,15 +66,14 @@
         <div class="dropdown-content">
           <a href="/user/list/request">LIST REQUEST</a>
           <a href="/user/list/finished">LIST FINISHED REQUEST</a>
-          
-          <a href="/user/list/testReadReport">LIST REPORT</a>
+          <a href="/user/list/readReport">LIST REPORT</a>
         </div>
       </div> 
     <a href="/logout">LOGOUT</a>
     <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="menuFunction()">&#9776;</a>
-  </div> <!-- DIV TOPNAV RIGHT -->
-</ul></div> <!-- DIV TOPNAV -->
-</div> <!-- div mytopnav -->
+  </ul></div>
+</div>
+</div>
     
     <div id="content">{% block content %}
 
@@ -91,11 +90,11 @@
     
 
 
-    <div id="footer" style="position: fixed; bottom:0;">
+    <!-- <div id="footer" style="position: fixed; bottom:0;">
       {% block footer %}
       &copy; Copyright 2019 by <a href="http://domain.invalid/">you</a>.
       {% endblock %}
-    </div>
+    </div> -->
 
 
 
@@ -103,7 +102,7 @@
     <script>
     window.onscroll = function() {scrollFunc()};
 
-    var navbar = document.getElementById("myTopnav");
+    var navbar = document.getElementById("navbar");
     var sticky = navbar.offsetTop;
 
     function scrollFunc() {
@@ -114,12 +113,7 @@
       }
     }
 
-    $(document).ready(function(){
-        $("#successMessage").delay(3000).slideUp(300);
-
-    });
-
-      function menuFunction() {
+    function menuFunction() {
       var x = document.getElementById("myTopnav");
       if (x.className === "topnav") {
         x.className += " responsive";
@@ -127,6 +121,11 @@
         x.className = "topnav";
       }
     }
+
+  $(document).ready(function(){
+        $("#successMessage").delay(3000).slideUp(300);
+
+    });
   </script>
   </body>
 </html>

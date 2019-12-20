@@ -83,6 +83,19 @@
   </div>
 </div>
 
+<!-- <div class ="row">
+  <div class ="col-15">
+    <label for="penerima">PIC : </label>
+  </div>
+    <textarea id="PIC" name="PIC">{{detailSchedule[3]}}</textarea>
+</div>
+<div class ="row">
+  <div class ="col-15">
+    <label for="penerima">Dikirim ke : </label>
+  </div>
+    <textarea id="penerima" name="penerima">{{detailSchedule[4]}}</textarea>
+</div> -->
+
 <div class ="row">
   <div class ="col-35">
     <label for="PIC">PIC: </label>
@@ -179,7 +192,6 @@
 
 
 
-
 <div class ="row">
   <div class ="col-35">
     <label for="grouping">Schedule : </label>
@@ -187,11 +199,15 @@
 
   <div class="col-55">
     {% if row.sch_tanggal == '' %}
-      <input type ="radio" id="dm" value="hb" name="rutin" onload="myFunction2()" onclick="myFunction2()" checked>Day+Month</input>
-      <input type ="radio" id="dm2" value="tb" name="rutin" onclick ="myFunction3()">Date+Month</input>
+    <input type ="radio" id="dm" value="hb" name="rutin" onload="myFunction4('True')" onclick="myFunction2()" checked>Day+Month</input>
+    <input type ="radio" id="dm2" value="tb" name="rutin" onclick ="myFunction3()">Date+Month</input>
+
+
     {% else %}
-      <input type ="radio" id="dm" value="hb" name="rutin" onclick="myFunction2()">Day+Month</input>
-      <input type ="radio" id="dm2" value="tb" name="rutin" onload="myFunction3()" onclick ="myFunction3()" checked>Date+Month</input>
+    <input type ="radio" id="dm" value="hb" name="rutin" onclick="myFunction2()">Day+Month</input>
+    <input type ="radio" id="dm2" value="tb" name="rutin" onload="myFunction4('False')" onclick ="myFunction3()" checked>Date+Month</input>
+
+
     {% endif %}
   </div>
 </div>
@@ -228,13 +244,15 @@
                   '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'] %}
                   <ol style="list-style: none;">
                   <li>
-                
+                  
+                  
                       {% if date in row.sch_tanggal %}
                       <input type="checkbox" name="{{date[:3]}}" value="{{date}}" checked="checked">{{date}}
                       {% else %}
                       <input type="checkbox" name="{{date[:3]}}" value="{{date}}">{{date}}
                       {% endif %}
-                  
+                    
+                   
                   </li>
                 </ol>
                   {% endfor %}
@@ -255,8 +273,8 @@
             {% endfor %}
           </div>
     </div>
-  </div> <!-- DIV CLASS COL 55 -->
-</div> <!-- DIV ROW -->
+    </div>
+</div>
 
 
 
@@ -289,17 +307,15 @@
       <div class="colBut">
       <button class="submit">Save</button></div></form>
 
-{% if session.get('position') == 'Admin' %}
+<!-- 
+<form action="/deactivateSchedule" method="POST">
+  <button name="deactive" value="{{kode_laporan}}">Deactivate</button>
+</form> -->
       <div class="colBut">
         <form action="/admin/schedule/edit">
           <button class="submitred">Cancel</button>
         </form></div>
-{% else %}
-      <div class="colBut">
-        <form action="/spv/schedule/edit">
-          <button class="submitred">Cancel</button>
-        </form></div>
-{% endif %}
+
 </center>
     
 

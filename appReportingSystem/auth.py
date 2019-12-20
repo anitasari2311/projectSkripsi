@@ -57,6 +57,28 @@ def getPosition():
             db.close()
         print("MySQL connection is closed")
 
+def getPosisi():
+    username = request.form['username']
+    try:
+        db = databaseCMS.db_request()
+        cursor = db.cursor()
+
+        cursor.execute(''.join(['select user_posisi from m_user where user_id = "'+username+'"']))
+
+        record = cursor.fetchone()
+
+        position = str(record).replace("('",'').replace("',)",'')
+        
+        return position
+
+    except Error as e:
+        print("Error while conencting file MySQL", e)
+    finally:
+            #Closing DB Connection
+        if(db.is_connected()):
+            cursor.close()
+            db.close()
+        print("MySQL connection is closed")
 
 def getUserName():
     username = request.form['username']
@@ -135,6 +157,7 @@ def auth_login():
                 session['user_id'] = getUserId()
                 session['username'] = getUserName()
                 session['position'] = getPosition()
+                session['posisi']   = getPosisi()
 
 
                 data = {'SessionId' : session['user_id'],
@@ -192,7 +215,7 @@ def logout():
     """Clear the current session, including the stored user id."""
     
     print('==[ LOGOUT ]==')
-    # print('ID   : ',session['user_id'])
+    print('ID   : ',session['user_id'])
     print('Name : ',session['username'])
     print('Date : ',datetime.datetime.now().strftime('%x'))
     print('Time : ',datetime.datetime.now().strftime('%X'))

@@ -88,7 +88,7 @@ class databaseCMS:
 		db=databaseCMS.db_template()
 		cursor=db.cursor()
 		cursor.execute('SELECT server_jenis, server_host, server_port,\
-						 server_loginName, server_password FROM m_server\
+						 server_loginName, server_password, server_nama FROM m_server\
 						WHERE server_id = "'+serverId+'" ')
 		result = cursor.fetchone()
 
@@ -96,6 +96,7 @@ class databaseCMS:
 		server_host 	= result[1]
 		server_port 	= result[2]
 		server_user 	= result[3]
+		server_nama 	= result[5]
 
 		# passwordDecoded=base64.b64decode(result[4])
 		# server_password=str(passwordDecoded,'utf-8')
@@ -116,7 +117,8 @@ class databaseCMS:
 			print("Connected to MySQL database...",db_Info)
 			print("=======================================")
 			return connection
-
+		# else:
+		# 	pyodbc.connect(r'Driver={SQL Server};Server="'+server_nama+'";UID="'+server_user+'";PWD=r3porting')
 		else:
 			connection = mysql.connector.connect(
 			host='localhost',

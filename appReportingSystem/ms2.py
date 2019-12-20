@@ -209,7 +209,7 @@ class Template:
             db = databaseCMS.db_template()
             cursor = db.cursor()
 
-            cursor.execute(' SELECT nama_kolom, lokasi, jenisFooter FROM m_detailF WHERE report_id = "'+kode_laporan+'"  ')
+            cursor.execute(' SELECT nama_kolom, lokasi, urutan FROM m_detailF WHERE report_id = "'+kode_laporan+'"  ')
 
             detailFooterTemplate = cursor.fetchall()
 
@@ -1155,19 +1155,21 @@ class Schedule:
             try:
                 db = databaseCMS.db_template()
                 cursor = db.cursor()
+                cursor.execute('SELECT report_deskripsi FROM m_report WHERE report_id ="'+kode_laporan+'"')
+                res = cursor.fetchall()
+                keterangan = str([x[0] for x in res]).replace("['","").replace("']","")
+
 
                 cursor.execute('DELETE FROM t_schedule WHERE report_id = "'+kode_laporan+'" ')
                 
 
-                cursor.execute('INSERT INTO t_schedule VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                cursor.execute('INSERT INTO t_schedule VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                     (kode_laporan, jadwalHari, jadwalBln, jadwalTgl, grouping,
-                        reportPIC, org, kategori, lastUpdate, aktifYN, note, reportPenerima))
+                        reportPIC, org, kategori, lastUpdate, aktifYN, keterangan, note, reportPenerima))
                 db.commit()
 
-                cursor.execute(' UPDATE m_report SET report_scheduleYN = "Y" WHERE report_id = "'+kode_laporan+'" ')
+                cursor.execute('UPDATE m_report SET report_scheduleYN = "Y"  WHERE report_id = "'+kode_laporan+'" ')
                 db.commit()
-                # cursor.execute('UPDATE m_report SET report_scheduleYN = "Y", report_judul ="'+header+'", report_deskripsi="'+keterangan+'"  WHERE report_id = "'+kode_laporan+'" ')
-                # db.commit()
 
 
                 return 'Success'
@@ -1319,7 +1321,7 @@ class Schedule:
             db = databaseCMS.db_template()
             cursor = db.cursor()
 
-            cursor.execute('SELECT report_id, report_judul, report_deskripsi, report_periode, report_footer, org_id, report_header, LEFT(report_createdDate,11), report_userUpdate, server_id FROM m_report WHERE report_id = "'+kode_laporan+'" ')
+            cursor.execute('SELECT report_id, report_judul, report_deskripsi, report_periode, report_footer, org_id, report_header, LEFT(report_createdDate,11), report_userUpdate, server_id, ktgri_id FROM m_report WHERE report_id = "'+kode_laporan+'" ')
 
             result = cursor.fetchone()
             
@@ -1566,8 +1568,103 @@ class Schedule:
                         db.close()
                     print("MySQL connection is closed")
 
+    #DISPLAY RUN SCHEDULE
+    @app.route('/getKodeReportRunAll', methods=['POST','GET'])
+    def getKodeReportRunAll():
+        hari    = datetime.datetime.now().strftime('%A') #ex. Monday
+        tanggal = datetime.datetime.now().strftime('%d') #ex. 01
+        bulan   = datetime.datetime.now().strftime('%B') #ex. January
 
+        try:
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
+            
+            cursor.execute('SELECT a.report_id, server_id, org_id, ktgri_id,\
+                            report_judul, sch_hari, sch_bulan, sch_tanggal,\
+                            sch_penerima, sch_reportPIC, sch_prioritas, sch_jam\
+                            FROM t_schedule a\
+                            LEFT JOIN m_report b\
+                            ON a.report_id = b.report_id\
+                            WHERE \
+                            sch_hari LIKE "%'+hari+'%" AND sch_bulan LIKE "%'+bulan+'%"\
+                            OR \
+                            sch_bulan LIKE "%'+bulan+'%" AND sch_tanggal LIKE "%'+tanggal+'%" \
+                            ORDER BY sch_prioritas, report_id ASC')
+            result = cursor.fetchall()
 
+            getRunSched = requests.get('http://127.0.0.1:5003/getStatusRunSchedule')
+            getRunSched = json.loads(json.dumps(getRunSched.json()))
+            resKode = []
+            finishRun = []
+            for i in getRunSched:
+                repId = i['reportId']
+                finishRun.append(repId)
+                
+
+            for i in result:
+                g = requests.get('http://127.0.0.1:5002/getNamaServer/'+i[1])
+                h = json.dumps(g.json())
+                j = json.loads(h)
+                for x in j:
+                    serName = x['Name']
+
+                a = requests.get('http://127.0.0.1:5001/getNamaOrg/'+str(i[2]))
+                b = json.dumps(a.json())
+                c = json.loads(b)
+                for x in c:
+                    orgName = x['org_name']
+            
+                d = requests.get('http://127.0.0.1:5001/getNamaKat/'+str(i[3]))
+                e = json.dumps(d.json())
+                f = json.loads(e)
+                for kat in f:
+                    katName = kat['kat_name']
+
+                PIC=[]
+                Penerima=[]
+                getNama = requests.get('http://127.0.0.1:5001/getNamaUser/'+i[0])
+                namaResp = json.dumps(getNama.json())
+                loadNama = json.loads(namaResp)
+                for k in loadNama:
+                    namaPIC = k['PIC']
+                    namaPen = k['Pen']
+                    PIC.append(namaPIC)
+                    Penerima.append(namaPen)
+                namaPIC         = str(PIC).replace("[[[['","").replace("']]]]","").replace("[['","").replace("']]","")
+                namaPenerima    = str(Penerima).replace("[[[['","").replace("']]]]","").replace("[['","").replace("']]","")
+
+                resD={
+                'reportId'      : i[0],
+                'server_id'     : i[1],
+                'serNama'       :serName,
+                'org_id'        : i[2],
+                'orgNama'       : orgName,
+                'ktgri_id'      : i[3],
+                'kateNama'      : katName,
+                'reportJudul'   : i[4],
+                'schHari'       : i[5],
+                'schBulan'      : i[6],
+                'schTanggal'    : i[7],
+                'schPenerima'   : i[8],
+                'namaPenerima'  : namaPenerima,
+                'schPIC'        : i[9],
+                'namaPIC'       : namaPIC,
+                'prioritas'     : i[10],
+                'jam'           : str(i[11])
+                }
+                if resD['reportId'] not in finishRun:
+                    resKode.append(resD)
+            resultKode = json.dumps(resKode,indent=4)
+            
+            return resultKode
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
 
     @app.route('/getKodeReportRunToday', methods=['POST','GET'])
     def getKodeReportRunToday():
@@ -1586,9 +1683,11 @@ class Schedule:
                             LEFT JOIN m_report b\
                             ON a.report_id = b.report_id\
                             WHERE \
+                            sch_jam ="" or sch_jam is null  AND\
                             sch_hari LIKE "%'+hari+'%" AND sch_bulan LIKE "%'+bulan+'%"\
                             OR \
-                            sch_bulan LIKE "%'+bulan+'%" AND sch_tanggal LIKE "%'+tanggal+'%" ')
+                            sch_bulan LIKE "%'+bulan+'%" AND sch_tanggal LIKE "%'+tanggal+'%" \
+                            ORDER BY sch_prioritas ASC')
             result = cursor.fetchall()
             
             resKode = []
@@ -1638,6 +1737,112 @@ class Schedule:
             resultKode = json.dumps(resKode,indent=4)
             
             return resultKode
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
+
+    @app.route('/getKodeReportRunJam', methods=['POST','GET'])
+    def getKodeReportRunJam():
+        hari    = datetime.datetime.now().strftime('%A') #ex. Monday
+        tanggal = datetime.datetime.now().strftime('%d') #ex. 01
+        bulan   = datetime.datetime.now().strftime('%B') #ex. January
+
+        try:
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
+            
+            cursor.execute('SELECT a.report_id, server_id, org_id, ktgri_id,\
+                            report_judul, sch_hari, sch_bulan, sch_tanggal,\
+                            sch_penerima, sch_reportPIC, sch_jam\
+                            FROM t_schedule a\
+                            LEFT JOIN m_report b\
+                            ON a.report_id = b.report_id\
+                            WHERE \
+                            sch_jam <> "" AND\
+                            sch_hari LIKE "%'+hari+'%" AND sch_bulan LIKE "%'+bulan+'%"\
+                            OR \
+                            sch_bulan LIKE "%'+bulan+'%" AND sch_tanggal LIKE "%'+tanggal+'%" \
+                            ')
+            result = cursor.fetchall()
+            
+            resKode = []
+            for i in result:
+                a = requests.get('http://127.0.0.1:5001/getNamaOrg/'+str(i[2]))
+                b = json.dumps(a.json())
+                c = json.loads(b)
+                for x in c:
+                    orgName = x['org_name']
+            
+                d = requests.get('http://127.0.0.1:5001/getNamaKat/'+str(i[3]))
+                e = json.dumps(d.json())
+                f = json.loads(e)
+                for kat in f:
+                    katName = kat['kat_name']
+
+                PIC=[]
+                Penerima=[]
+                getNama = requests.get('http://127.0.0.1:5001/getNamaUser/'+i[0])
+                namaResp = json.dumps(getNama.json())
+                loadNama = json.loads(namaResp)
+                for k in loadNama:
+                    namaPIC = k['PIC']
+                    namaPen = k['Pen']
+                    PIC.append(namaPIC)
+                    Penerima.append(namaPen)
+                namaPIC         = str(PIC).replace("[[[['","").replace("']]]]","").replace("[['","").replace("']]","")
+                namaPenerima    = str(Penerima).replace("[[[['","").replace("']]]]","").replace("[['","").replace("']]","")
+
+                resD={
+                'reportId'      : i[0],
+                'server_id'     : i[1],
+                'org_id'        : i[2],
+                'orgNama'       : orgName,
+                'ktgri_id'      : i[3],
+                'kateNama'      : katName,
+                'reportJudul'   : i[4],
+                'schHari'       : i[5],
+                'schBulan'      : i[6],
+                'schTanggal'    : i[7],
+                'schPenerima'   : i[8],
+                'namaPenerima'  : namaPenerima,
+                'schPIC'        : i[9],
+                'namaPIC'       : namaPIC,
+                'jamRun'        : str(i[10])
+                }
+                resKode.append(resD)
+            resultKode = json.dumps(resKode,indent=4)
+            
+            return resultKode
+        except Error as e :
+            print("Error while connecting file MySQL", e)
+        finally:
+                #Closing DB Connection.
+                    if(db.is_connected()):
+                        cursor.close()
+                        db.close()
+                    print("MySQL connection is closed")
+
+    @app.route('/countReportToday')
+    def countReportToday():
+        hari    = datetime.datetime.now().strftime('%A') #ex. Monday
+        tanggal = datetime.datetime.now().strftime('%d') #ex. 01
+        bulan   = datetime.datetime.now().strftime('%B') #ex. January
+        try:
+            db = databaseCMS.db_template()
+            cursor = db.cursor()
+            cursor.execute('SELECT COUNT(report_id) FROM t_schedule WHERE\
+                            sch_hari LIKE "%'+hari+'%" AND sch_bulan LIKE "%'+bulan+'%"\
+                            OR \
+                            sch_bulan LIKE "%'+bulan+'%" AND sch_tanggal LIKE "%'+tanggal+'%" ')
+            result = cursor.fetchone()
+
+            result = str(result).replace("(","").replace(",)","")
+            return result
         except Error as e :
             print("Error while connecting file MySQL", e)
         finally:

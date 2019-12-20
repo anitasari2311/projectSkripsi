@@ -9,15 +9,15 @@ encodedStr = str(encodedBytes, "utf-8")
 encodedBytes2 = base64.b64encode(encodedStr.encode("utf-8"))
 encodedStr2 = str(encodedBytes2, "utf-8")
 
-decoded2=base64.b64decode(encodedStr2)
-decodedStr=str(decoded2,'utf-8')
+decoded1=base64.b64decode(encodedStr2)
+decodedStr1=str(decoded1,'utf-8')
 
-decoded=base64.b64decode(decodedStr)
-decodedSt2r=str(decoded,'utf-8')
+decoded2=base64.b64decode(decodedStr1)
+decodedStr2=str(decoded2,'utf-8')
 
-print(decodedStr)
+
 print(encodedStr)
-print('========')
 print(encodedStr2)
 
-print(decodedSt2r)
+print(decodedStr1)
+print(decodedStr2)

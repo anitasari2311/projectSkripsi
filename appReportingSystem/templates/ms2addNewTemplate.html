@@ -42,7 +42,7 @@
         </div>
 
         <div class="col-55">
-          <input type="text" id="kodeLaporan2" name="kodeLaporan2" placeholder="Kode Laporan" style="width: 120px">
+          <input type="text" id="kodeLaporan2" name="kodeLaporan2" placeholder="Kode Laporan" style="width: 120px" required>
           <select id="kategori" name="kategori" style="width: 235px">
             {% for row in listKategori %}
               <option value="{{row.Id}}">{{row.Name}}</option>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="col-55">
-          <input type="text" id="kodeLaporan2" name="noLap" placeholder="Nomor Laporan" style="width: 120px">
+          <input type="text" id="kodeLaporan2" name="noLap" placeholder="Nomor Laporan" style="width: 120px" required>
         </div>
       </div>
 
@@ -93,7 +93,7 @@
         </div>
 
         <div class="col-85">
-          <input type="text" id="kodeReport" name="namaLaporan" style="text-transform: uppercase;" >
+          <input type="text" id="kodeReport" name="namaLaporan" style="text-transform: uppercase;" required>
         </div>
       </div>
       <br>
@@ -105,7 +105,7 @@
 
         <div class="col-85">
           <textarea rows="4" cols="50" id="tujuan" 
-          name="tujuan" ></textarea>
+          name="tujuan" required></textarea>
         </div>
       </div>
       <br>
@@ -116,7 +116,7 @@
         </div>
 
         <div class="col-85">
-          <textarea rows="4" cols="50" id="filter" name="filter"></textarea>
+          <textarea rows="4" cols="50" id="filter" name="filter" required></textarea>
         </div>
       </div>
       <br>
@@ -127,7 +127,7 @@
         </div>
 
         <div class="col-55">
-            <input type="number" class = "col-10" id="jmlKolom" name="jmlTampilan" style="width:120px; height: 35px;" min= "1"; max="25">
+            <input type="number" class = "col-10" id="jmlKolom" name="jmlTampilan" style="width:120px; height: 35px;" min= "1"; max="25" required>
         </div>
       </div>
       <br>
@@ -138,7 +138,7 @@
         </div>
 
         <div class="col-55">
-            <input type="number" class = "col-10" id="jmlHeader" name="jmlHeader" style="width:120px; height: 35px;" max="2">
+            <input type="number" class = "col-10" id="jmlHeader" name="jmlHeader" style="width:120px; height: 35px;" min="1" max="2" required>
         </div>
       </div>
       <br>
@@ -149,7 +149,7 @@
         </div>
 
         <div class="col-55">
-          <input type="number" class = "col-10" id="jmlFooter" name="jmlFooter" style="width:120px; height: 35px;" min= "0"; max="2">
+          <input type="number" class = "col-10" id="jmlFooter" name="jmlFooter" style="width:120px; height: 35px;" min= "0"; max="2" required>
         </div>
       </div>
       <br>
@@ -160,7 +160,7 @@
         </div>
 
         <div class="col-55">
-          <input type="text" id="periode" name="periode" style="width: 120px">
+          <input type="text" id="periode" name="periode" style="width: 120px" required>
         </div>
       </div>
       <br>
@@ -197,7 +197,7 @@
         </div>
       {% else %}
         <div class="colBut">
-          <form action="/spv/home">
+          <form action="/spv">
             <button class="submitRed">Exit</button>
           </form>
         </div>

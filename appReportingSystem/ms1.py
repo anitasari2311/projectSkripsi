@@ -1486,6 +1486,36 @@ class RequestLaporan:
     #             db.close()
     #         print("MySQL connection is closed")
 
+    @app.route('/updateDataProfile/<data>', methods = ['POST', 'GET'])
+    def updateDataProfile(data):
+        if request.method == 'POST':
+            profileData = json.loads(data)
+
+            for x in profileData:
+                uId = profileData['uId']
+                nama_user = profileData['userNama']
+                email_user = profileData['userEmail']
+
+            try: 
+                db = databaseCMS.db_request()
+                cursor = db.cursor()
+            
+                cursor.execute(' UPDATE m_user SET user_name = "'+nama_user+'",\
+                                 user_email = "'+email_user+'" WHERE user_id = "'+uId+'" ')
+                db.commit()
+
+                return 'Profile berhasil di update'
+
+            except Error as e:
+                print("Error while connecting file MySQL", e)
+                flash('Error,', e)
+
+            finally:
+                    #Closing DB Connection.
+                        if(db.is_connected()):
+                            cursor.close()
+                            db.close()
+                        print("MySQL connection is closed")
 
     @app.route('/updateDataPassword/<data>', methods = ['POST', 'GET'])
     def updateDataPassword(data):
@@ -1712,15 +1742,15 @@ class RequestLaporan:
                 db.close()
             print("MySQL connection is closed")
 
-    @app.route('/countOnProgressTask/', methods=['GET'])
-    def countOnProgressTask():
+    @app.route('/countOngoingTask/<uId>', methods=['GET'])
+    def countOngoingTask(uId):
        
         try:
             db = databaseCMS.db_request()
             cursor = db.cursor()
             cursor.execute('SELECT COUNT(req_id)\
                             FROM t_request\
-                            WHERE req_status = "On Process" ')
+                            WHERE req_status = "On Process" and prog_id = "'+uId+'"')
             res = cursor.fetchone()
 
             return json.dumps(res)
@@ -1734,6 +1764,36 @@ class RequestLaporan:
                 cursor.close()
                 db.close()
             print("MySQL connection is closed")
+    
+    @app.route('/countAvailableTask')
+    def countAvailableTask():
+        try:
+            db = databaseCMS.db_request()
+            cursor = db.cursor()
+            cursor.execute('SELECT COUNT(req_id) FROM t_request\
+                            WHERE req_status ="Waiting" and req_prioritas = "2" ')
+            normalReq = cursor.fetchone()
+            normalReq = str(normalReq).replace("(","").replace(",)","")
+
+            cursor.execute('SELECT COUNT(req_id) FROM t_request\
+                            WHERE req_status ="Waiting" and req_prioritas = "1" ')
+            importantReq = cursor.fetchone()
+            importantReq = str(importantReq).replace("(","").replace(",)","")
+
+            result = {'data': {'normal': normalReq, 'important' : importantReq}}
+
+            return json.dumps(result)
+        except Error as e:
+                print("Error while connecting file MySQL", e)
+                flash('Error,', e)
+
+        finally:
+                #Closing DB Connection.
+            if(db.is_connected()):
+                cursor.close()
+                db.close()
+            print("MySQL connection is closed")
+
 
     @app.route('/getProfile/<user_id>', methods = ['GET', 'POST'])
     def getProfile(user_id):
@@ -1766,8 +1826,6 @@ class RequestLaporan:
                 cursor.close()
                 db.close()
             print("MySQL connection is closed")
-
-
+            
 if __name__ == "__main__":
-    # app.run(debug=True, port='5001')
-    app.run(host='0.0.0.0', debug=True, port='5001')
+    app.run(debug=True, port='5001')
