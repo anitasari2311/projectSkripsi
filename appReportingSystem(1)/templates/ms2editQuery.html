@@ -1,0 +1,81 @@
+<html>
+<head>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+  <title>Change Query</title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}  
+  {% extends "NAVBARPROG.html" %}
+  {% set active_page = 'query' %}
+{% else %}
+
+  {% extends "NAVBARSPV.html" %}
+  {% set active_page = 'query' %}
+{% endif %}    
+
+{% block content %}
+<br><br>
+  <div class ="judul">
+    <center>EDIT QUERY</center>
+  </div>
+
+<br><br>
+<center>
+
+{% if session.get('position') == 'Admin' %}
+  <div class="containEdit">
+    <div class="tulisan" style="width: 350px; text-align: left;">
+      <label for="kodLap"> Template</label>
+      <form action="/admin/query/edit" autocomplete="off" method = "POST">
+        <input name="kodLap" list="report">
+        <datalist id= "report" name= "kodLap">
+          {% for report in listKodeReportQuery %}
+            <option name = "kodLap" value="{{report.reportId}}">{{report.reportId}}</option>
+          {% endfor %}
+        </datalist>
+    </div>
+<br><br><br><br>
+    <div class="colBut">
+      <button class="submit"> Go </button> </div>
+  </form>
+    
+
+      <div class="colBut">
+      <form action="/admin/home">
+        <button class="submitRed"> Cancel </button>
+      </form>
+      </div>
+
+
+    {% else %}
+
+      <div class="containEdit">
+    <div class="tulisan" style="width: 350px; text-align: left;">
+      <label for="kodLap"> Template:  </label>
+      <form action="/spv/query/edit" autocomplete="off" method = "POST">
+        <input name="kodLap" list="report">
+        <datalist id= "report" name= "kodLap">
+          {% for report in listKodeReportQuery %}
+            <option name = "kodLap" value="{{report.reportId}}">{{report.reportId}}</option>
+          {% endfor %}
+        </datalist>
+    </div>
+<br><br><br><br>
+    <div class="colBut">
+      <button class="submit"> Go </button> </div>
+  </form>
+
+      <div class="colBut">
+      <form action="/spv/home">
+        <button class="submitRed"> Cancel </button>
+      </form>
+      </div>
+   {% endif %}
+  
+</center>
+{% endblock %}
+</body>
+</html>

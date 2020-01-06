@@ -1,0 +1,139 @@
+<head>
+<html>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <title> List Report </title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}
+  {% extends "NAVBARPROG.html" %}
+  {% set active_page = 'report' %}
+{% else %}
+
+  {% extends "NAVBARSPV.html" %}
+  {% set active_page = 'report' %}
+{% endif %}
+
+
+{% block content %}
+<br><br>
+<div class ="judul">
+  <center>LIST REPORT</center>
+</div>
+
+<br>
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search report code" title="Type in a name">
+<div class ="myBoxTask">
+                      <table id="list">
+                        <tr>
+                          <th>Report Code</th>
+                          <th>Organization</th>
+                          <th>Report Title</th>
+                          <th>Filter</th>
+                          <th>Active</th>
+                          <th>Day</th>
+                          <th>Month</th>
+                          <th>Date</th>
+                          <!-- <th>Generate Excel</th> -->
+                        </tr>
+                      {% for row in listReport %}
+                        <tr >
+                          <td id="{{row.reportId}}" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">{{row.reportId}}</td>
+                          <td id="{{row.reportId}}" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">{{row.orgId}}</td>
+                          <td id="{{row.reportId}}" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">{{row.reportJudul}}</td>
+                          <td id="{{row.reportId}}" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">{{row.reportDeskripsi}}</td>
+                          <td id="{{row.reportId}}" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">{{row.reportAktifYN}}</td>
+                          <td id="{{row.reportId}}" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">{{row.schHari}}</td>
+                          <td id="{{row.reportId}}" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">{{row.schBulan}}</td>
+                          <td id="{{row.reportId}}" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">{{row.schTanggal}}</td>
+                          <!-- <td>
+                            <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">Preview</button></td> -->
+
+                            <div id="modal2{{row.reportId}}" class="modal">
+
+                      <!-- Modal content -->
+
+              <form action='/admin/preview' method='POST'>
+                      <div class="modal-content">
+                        <span class="close" onclick="closeModal2()">&times;</span>
+                        <center>
+                        <strong>Preview {{row.reportId}} - {{row.reportJudul}} </strong>
+                        <br><br><br>
+                        <p>Confirm preview ?</p>
+                      </center>
+                         <button name="kodLap" value ="{{row.reportId}}"> OK </button>
+                      </div>
+              </form>
+                    </div>
+
+                          
+                      {% endfor %}
+
+                            
+                      </table>
+</div>
+
+
+
+
+
+<br><br>
+
+{% endblock %}
+
+</body>
+
+{% block script %}
+
+<script>
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function click_process(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+
+
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    td2 = tr[i].getElementsByTagName("td")[2];
+    if(td){
+    txtValue = td.textContent || td.innerText;
+    txtValue2 = td2.textContent || td2.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1 || txtValue2.toUpperCase().indexOf(filter) > -1) {
+      tr[i].style.display = "";
+     }else {
+      tr[i].style.display = "none";
+      }
+       }  
+  }
+}
+
+
+
+</script>
+{% endblock %}
+</html>

@@ -1,0 +1,84 @@
+<html>
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>On Progress Task</title>
+</head>
+<body bgcolor="#F0FFF0">
+
+{% extends "NAVBARSPV.html" %}
+{% set active_page = 'task' %}
+
+{% block content %}
+<br><br>
+<center>
+    <div class="judul">ON PROGRESS TASK</div>
+ </center>
+{% if onProgTask %}
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search report.." title="Type in a name">
+            
+            <br>
+
+<center>
+            <table id="list">
+              <tr>
+                <th>Employee Name</th>
+                <th>Request Code</th>
+                <th>Title</th>
+                <th>Department</th>
+                <th>Organization</th>
+                <th>Request Date</th>
+                <th>Date Accept Task</th>
+                <th>PIC</th>
+                <th>Deadline</th>
+              </tr>
+            
+              {% for onProg in onProgTask %}
+              <tr>
+                <td>{{onProg['onNama']}}</td>
+                <td>{{onProg['onId']}}</td>
+                <td>{{onProg['onJud']}}</td>
+                <td>{{onProg['onKat']}}</td>
+                <td>{{onProg['onOrg']}}</td>
+                <td>{{onProg['onDate']}}</td>
+                <td>{{onProg['onDateAccept']}}</td>
+                <td>{{onProg['onPIC']}}</td>
+                <td>{{onProg['onDeadline']}}</td>
+              </tr>
+              
+              {% endfor %}
+             
+{% else %}
+<p> Tidak ada task yang sedang dikerjakan </p>
+{% endif %}
+</table> 
+            
+  
+</center>
+</body>
+</html>
+{% endblock %}
+
+
+{% block script %}
+<script>
+//           BUAT FITUR SEARCH LAPORAN
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
+{% endblock %}

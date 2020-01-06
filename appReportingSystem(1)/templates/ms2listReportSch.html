@@ -1,0 +1,130 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title> List Report </title>
+</head>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<body bgcolor="#F0FFF0">
+  {% extends "NAVBARPROG.html" %}
+  {% set active_page = 'list' %}
+
+{% block content %}
+ <br><br>
+
+
+<div class ="judul">
+  <center>LIST REPORT SCHEDULE</center>
+</div>
+  
+<!-- </div> -->
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search report code" title="Type in a name">
+
+    <table id="list">
+      <tr>
+        <th>Report Code</th>
+          <th>Organization</th>
+            <th>Report Title</th>
+              <th>Last Update</th>
+                <th>Download Report</th>
+                  <th>Read Report</th>
+      </tr>
+    {% for row in readReport %}
+      <tr>
+                  <td>{{row.reportId}}</td>
+                <td>{{row.orgId}} - {{row.orgName}}</td>
+              <td>{{row.reportJudul}}</td>
+            <td>{{row.reportLastProc}}</td>
+          <td>
+      <center>
+          <button id="{{row.reportId}}" class="submit" onclick= "click_process(this.id)" name="previewButton" value="{{row.reportId}}">Download</button>
+      </center>
+      
+   <!-- Modal content -->
+          <div id="modal2{{row.reportId}}" class="modal">
+    <form action='/downloadReport' method='POST'>
+            <div class="modal-content">
+              <span class="close" onclick="closeModal2()">&times;</span>
+              <center>
+              <strong>Download {{row.reportId}} - {{row.reportJudul}} </strong>
+              <br><br><br>
+              <p>Confirm download ?</p>
+            </center>
+               <button id="downloadR" name="kodLap" value ="{{row.reportId}}"> OK </button>
+            </div>
+    </form>
+          </div>
+
+        </td>
+
+        <td>
+          <form action="/readNow" method="POST">
+          <button class="submit" name="kodRead" value="{{row.reportId}}">Read</button>
+        </form>
+        </td>
+    {% endfor %}
+</tr>
+
+    </table>
+<br><br>
+</body>
+
+</html>
+{% endblock %}
+
+{% block script %}
+<script>
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function click_process(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+
+  //           BUAT FITUR SEARCH LAPORAN
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+
+
+// $(document).ready(function(){
+//     $('#downloadR').click(function(){
+//       var kode_laporan = $('[name="kodLap"]').val();
+//       // $.get('http:///127.0.0.1:5004/downloadReport/'+kode_laporan)
+
+//       alert(kode_laporan+' Downloaded');
+//     });   
+//   });
+
+</script>
+{% endblock %}

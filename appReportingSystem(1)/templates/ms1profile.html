@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styleUser.css') }}">
+    <title>Profile</title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'User' %}
+
+  {% extends "ms1NAVBAR.html" %}
+  {% set active_page = 'account' %}
+
+{% elif session.get('position') == 'Admin' %}
+
+  {% extends "NAVBARPROG.html" %}
+  {% set active_page = 'account' %}
+
+
+{% else %}
+  {% extends "NAVBARSPV.html" %}
+  {% set active_page = 'account' %}
+
+{% endif %}
+
+{% block content %}
+<br>
+
+<div class ="judul">
+        <center> PROFILE </center>
+    </div> 
+
+  {% if profileUser %}
+    <div class="containModify">
+        <br>
+        <div class ="row">
+            <div class ="col-25">
+                <label for="userId">ID</label>
+            </div>
+            
+            <div class="col-75">
+                <input type="text" id="userId" name="userId" placeholder="{{profileUser[0].userId}}" disabled="">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label for="posisi">Position</label>
+            </div>
+  
+            <div class="col-75">
+                <input type="text" placeholder="{{profileUser[0].userPosisi}}" id="posisi" name="posisi" disabled="">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label for="name">Name</label>
+            </div>
+
+            <div class="col-75">
+                <input type="text" placeholder="{{profileUser[0].userName}}" id="name" name="name" disabled="">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label for="email">Email</label>
+            </div>
+
+            <div class="col-75">
+                <input type="text" placeholder="{{profileUser[0].userEmail}}" id="email" name="email" disabled="">
+            </div>
+        </div>
+
+            <br><br><br>
+{% endif %}
+
+        <center>
+          {% if session.get('position') == 'User' %}
+            <div class="colBut"><form action="/user/profile/edit">
+              <button class="submit" id="editProfile">Edit Profile</button><br></div></form>
+                      
+            <div class="colBut"><form action="/user/account">
+              <button class="submit" style="width: 150px;">Change Password</button>
+            </form></div>
+          {% elif session.get('position') == 'Admin' %}
+            <div class="colBut"><form action="/user/profile/edit">
+              <button class="submit" id="editProfile">Edit Profile</button><br></div></form>
+
+            <div class="colBut"><form action="/admin/account">
+              <button class="submit" style="width: 150px;">Change Password</button>
+            </form></div>
+          {% else %}
+            <div class="colBut"><form action="/user/profile/edit">
+              <button class="submit" id="editProfile">Edit Profile</button><br></div></form>
+
+            <div class="colBut"><form action="/spv/account">
+              <button class="submit" style="width: 150px;">Change Password</button>
+            </form></div>
+          {% endif %}
+        </center>
+       
+    </div>
+</body>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    function validasi(){
+      var success = document.getElementById("save").value;
+      var newPass = document.getElementById("newPass").value;
+      var confPass = document.getElementById("confPass").value;
+
+      if(confPass != newPass){
+        alert("konfirmasi password harus sesuai dengan password baru")
+        return false;
+      }else{
+        alert("Password successfully changed!")
+        return false;
+      }
+      return true;
+
+    } 
+
+</script>
+{% endblock %}
+
+</html>

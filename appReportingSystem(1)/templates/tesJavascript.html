@@ -1,0 +1,59 @@
+<html>
+<body>
+<select id="selectNumber">
+    
+</select>
+
+
+<!-- <button onclick="namaKolom(28)">TEST</button> -->
+<input type="text" name="jmlKolom" id="jmlKolom" onkeyup="namaKolom(this.value)">
+
+</body>
+
+<script src="C:\appReportingSystemFix\static\math.min.js"></script>
+<script type="text/javascript">
+	
+function namaKolom(jmlKolom){
+	var select = document.getElementById("selectNumber");
+	var arr = [];
+	var Character = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+
+	for (i = 1; i <= jmlKolom; i++){
+		if (i<=25){
+			var kolom = Character.substr(i,1)+'8';
+			/*var kolom2 = Character.substr(i,1)+'9';*/
+			
+			arr.push(kolom);
+			/*arr.push(kolom2);*/
+			
+		}
+		else{
+			var i1 = math.floor(i/(Character.length))-1;
+			var i2 = ((i - (math.floor(i/(Character.length)) -1)) - (25*(math.floor(i/(Character.length))))) - 1;
+			var kolom = Character.substr(i1,1) + Character.substr(i2,1)+'8';
+			/*var kolom2 = Character.substr(i1,1) + Character.substr(i2,1)+'9';*/
+
+			arr.push(kolom);
+			/*arr.push(kolom2);*/
+			
+		}
+	}
+	console.log(arr)
+	// var idbaru = document.getElementById("opt2")
+	select.innerHTML = "";
+	for(var i = 0; i < arr.length; i++) {
+
+	    var opt = arr[i];
+	    var el = document.createElement("option", id="opt2");
+	    el.textContent = opt;
+	    el.value = opt;
+
+	    select.appendChild(el);
+		}
+
+}
+
+
+</script>
+</html>

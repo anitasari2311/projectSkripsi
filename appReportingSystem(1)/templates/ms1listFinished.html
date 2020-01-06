@@ -1,0 +1,156 @@
+<html>
+  <head>
+     <title>List Finished Request</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="{{ url_for('static', filename='styleUser.css') }}">
+  </head>
+  <body bgcolor="#F0FFF0">
+    
+    {% extends "ms1NAVBAR.html" %}
+    {% set active_page = 'list' %}
+
+    {% block content %}
+    <br><br>
+
+
+
+{% if listKelar %}
+
+                      <div class="judul">
+                        <center>LIST FINISHED REQUEST</center>
+                      </div>
+
+                      <table id="list">
+                        <tr>
+                          <th>Request Code</th>
+                          <th>Report Code</th>
+                          <th>Title</th>
+                          <th>Request Date</th>
+                          <th>Finished Date</th>
+                          <th>PIC</th>
+                          <th> Rating </th>
+                          <th>Download</th>
+                        </tr>
+
+                        {% for row in  listKelar %}
+                        <tr >
+                          <td>{{row['RequestId']}}</td>
+                          <td>{{row['RequestKodeLaporan']}}</td>
+                          <td>{{row['RequestJudul']}}</td>
+                          <td>{{row['RequestDate']}}</td>
+                          <td>{{row['RequestEndDate']}}</td>
+                          <td>{{row['RequestPIC']}}</td>
+                        {% if row['RequestRating'] == 0 %}
+
+                          <td>
+                    <button id ="{{row[5]}}" class="submit" onclick= "click_process(this.id)" name="finishButton" value="{{row[5]}}">Rate Me !</button>
+
+
+
+                    <div id="modal2{{row[5]}}" class="modal">
+
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                        <span class="close" onclick="closeModal2()">&times;</span>
+                        <strong>{{row['RequestId']}}</strong>
+                        <p> Input Rating : </p>
+                    <form action ="/sendRating" method = 'POST'>
+                        <select name="fRating">
+                          <option value="1">1 - Tidak Baik</option>
+                          <option value="2">2 - Kurang Baik</option>
+                          <option value="3">3 - Normal</option>
+                          <option value="4">4 - Cukup Baik</option>
+                          <option value="5">5 - Sangat Baik</option>
+                        </select>
+  
+
+                        <p> Keterangan: <p>
+                        <textarea name="inputKeterangan" style="height:200px"></textarea>
+
+
+                         <button name="finishRat" value ="{{row['RequestId']}}"> OK </button>
+                        </form>
+                      </div>
+
+                    </div>
+                          </td>
+
+                        {% else %}
+
+                          <td>{{row['RequestRating']}} / 5</td>
+                        {% endif %}
+
+                          <td>
+                            <form action="/downloadRequest" method="POST">
+                              <button class="submit" name="downloadButton" value="{{row.RequestId}}">Download</button>
+                            </form>
+                          </td>
+
+                        </tr>
+                        {% endfor %}
+                      </table>
+
+      </div>
+
+
+
+
+{% else %}
+                <div class="judul">
+                  <center>LIST FINISHED REQUEST</center>
+                </div>
+                <center><p>Belum ada Task yang diselesaikan</p></center>
+
+{% endif %}
+  </body>
+{% endblock %}
+
+{% block script %}
+<script>    
+  var btnProcess;
+  var modalItem;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal() {
+    modalItem.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem) {
+      modalItem.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem = document.getElementById(modalId);
+    modalItem.style.display = 'block';
+  }
+  function alertCancel(processId){
+    show_modal('modal'+processId);
+    //alert('modal'+processId);
+  }
+
+
+  var btnProcess2;
+  var modalItem2;
+  // // When the user clicks on <span> (x), close the modal
+  function  closeModal2() {
+    modalItem2.style.display = "none";
+  }
+  // // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modalItem2) {
+      modalItem2.style.display = "none";
+    }
+  }
+  function show_modal(modalId){
+    modalItem2 = document.getElementById(modalId);
+    modalItem2.style.display = 'block';
+  }
+  function click_process(processId){
+    show_modal('modal2'+processId);
+    //alert('modal'+processId);
+  }
+</script>
+{% endblock %}
+
+</html>
