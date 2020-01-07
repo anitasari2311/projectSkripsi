@@ -13,21 +13,21 @@
 
 {% block content %}
 
-<br><br>
+<br><br><br><br>
 <!-- <h3> <p align="Right">{{day}}, <span  id="time" align="Left"> </span> </p> </h3>
  <h2><p align="Right"> Welcome, {{session['username']}}</p></h2> -->
 
     
-
+<p style="color: white;">dkjsfbhdfgdfkgdfkghdfjkghdjkghdjkhdk</p>
 <div class="slideshow-container">
 <div class="mySlides fade">
-  <img src="/static/images/homeUser(1).jpg" style="width:70%; border: 0; position: center;">
+  <img src="/static/images/homeUser(1).jpg" style="width:90%; border: 0;" align="middle">
 <!--     <img src=" {{user_image}} " alt="User Image">
     <img src="{{ url_for('static', filename = 'rep.jpg') }}"> -->
 </div>
 
     <div class="mySlides fade">
-      <img src="/static/images/homeUser(2).jpg" style="width:70%; border: 0">
+      <img src="/static/images/homeUser(2).jpg" style="width:90%; border: 0" align="middle">
     </div>
 <!--     <div class="mySlides fade">
       <img src="img_mountains_wide.jpg" style="width:100%">
@@ -62,7 +62,7 @@ function showSlides() {
   }
   slides[slideIndex-1].style.display = "block";  
   dots[slideIndex-1].className += " active";
-  setTimeout(showSlides, 2000); // Change image every 2 seconds
+  setTimeout(showSlides, 5000); // Change image every 2 seconds
 }
 
 
