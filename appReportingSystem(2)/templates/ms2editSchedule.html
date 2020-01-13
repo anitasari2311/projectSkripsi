@@ -1,0 +1,91 @@
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!-- <style>
+  #myList {width: 200; list-style: none; margin: 0; auto 0 auto;}
+  #myList li {list-style-type: none; float: left; width: 100px;}
+  #myList li label{width: 200px; padding: 2px 10px 0 8px; display: inline-block;}
+</style> -->
+
+  <title> Edit Schedule </title>
+</head>
+
+<body bgcolor="#F0FFF0">
+{% if session.get('position') == 'Admin' %}
+
+
+{% extends "NAVBARPROG.html" %}
+{% set active_page = 'schedule' %}
+{% else %}
+
+{% extends "NAVBARSPV.html" %}
+{% set active_page = 'schedule' %}
+{% endif %}
+
+{% block content %}
+<br><br>
+<div class ="judul">
+  <center>EDIT SCHEDULE</center>
+</div>
+
+{% if session.get('position') == 'Admin' %}
+<form action="/admin/schedule/edit" autocomplete="off" method = 'POST'>
+
+<center>
+<div class ="containEdit">
+  <center>
+  <div class="tulisan" style="width: 350px; text-align: left;">
+    <label for="kodeRep">Kode Report : </label>
+    <input name="valKode" list="listKodeR">
+    <datalist id="listKodeR">
+      {% for row in listKodeLap %}
+        <option value="{{row['reportId']}}"></option>
+      {% endfor %}
+    </datalist>
+  </div>
+  
+<br><br><br><br>
+ 
+    <button class="submit">OK</button>
+  </center>
+
+</div>
+</form>
+</center>
+{% else %}
+
+<form action="/spv/schedule/edit" autocomplete="off" method = 'POST'>
+
+<center>
+<div class ="containEdit">
+  <center>
+  <div class="tulisan" style="width: 350px; text-align: left;">
+    <label for="kodeRep">Kode Report : </label>
+    <input name="valKode" list="listKodeR">
+    <datalist id="listKodeR">
+      {% for row in listKodeLap %}
+        <option value="{{row['reportId']}}"></option>
+      {% endfor %}
+    </datalist>
+  </div>
+  
+<br><br><br><br>
+ 
+    <button class="submit">OK</button>
+  </center>
+
+</div>
+</form>
+</center>
+
+{% endif %}
+
+<br>
+
+
+</center>
+
+{% endblock %}
+
+</body>
+</html>

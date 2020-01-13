@@ -1,0 +1,145 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title> Add New Query </title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+
+  
+  {% if session.get('position') == 'Admin' %}
+        {% extends "NAVBARPROG.html" %}
+        {% set active_page = 'query' %}
+  {% else %}
+
+        {% extends "NAVBARSPV.html" %}
+        {% set active_page = 'query' %}
+  {% endif %}
+
+{% block content %}
+<!-- BATAS MENUBAR -->
+<br><br>
+    <div class ="judul">
+      <center>EDIT QUERY</center>
+    </div>
+
+<center>
+<div class="containInsert">
+    <form action="/admin/query/edit/{{kode_laporan}}" method = "POST">
+    <div class ="rowF">
+        <label for="kodeReport">Report Code : </label>
+        <div class="column">
+          <input type="text" name="kodLap" value="{{kode_laporan}}" >
+        </div>
+    </div>
+          
+        
+      <br><br>
+      {% for i in range (0, 7) %}
+      <div class="rowF">
+        {%if editQ[i] != '' and editQ[i] != none %}
+          <label for="kodeReport">Query {{i+1}}</label>
+          <div class ="column">
+            <textarea  id = "q{{i+1}}" class = "textQuery" name="query{{i+1}}" style="width: 400px; height: 175px">{{editQ[i][0]}}</textarea>
+          </div>
+      
+        {%else%}
+  
+          <label for="kodeReport">Query {{i+1}}</label>
+          <div class ="column">
+            <textarea  id = "q{{i+1}}" class = "textQuery" name="query{{i+1}}" style="width: 400px; height: 175px"></textarea>
+          </div>
+
+        {%endif%}
+        
+        {%if editQ[i+7] != '' and editQ[i+7] != none %}
+          <label for="kodeReport">Query {{i+8}}</label>
+          <div class ="column">
+            <textarea  id = "q{{i+8}}" class = "textQuery" name="query{{i+8}}" style="width: 400px; height: 175px">{{editQ[i+7][0]}}</textarea>
+          </div>
+        {%else%}
+
+          <label for="kodeReport">Query {{i+8}}</label>
+          <div class ="column">
+            <textarea  id = "q{{i+8}}" class = "textQuery" name="query{{i+8}}" style="width: 400px; height: 175px"></textarea>
+          </div>
+        {%endif%}
+        <br>
+      </div>
+      {%endfor%}
+</center>
+</div>
+
+<center>
+      
+
+      <div class="colBut">
+      <button class="submit">Save</button></div>
+      </form>
+
+
+<div class="colBut">
+      <button class="" onclick="copyToClipboard('#q1')"> Copy Query </button> 
+    </div>
+
+{% if session.get('position') == 'Admin' %}
+      <div class="colBut">
+        <form action="/admin/home">
+          <button class="submitRed">Cancel</button></div>
+{% else %}
+        <div class="colBut">
+        <form action="/spv">
+          <button class="submitRed">Cancel</button></div>
+{% endif %}
+</center>      
+
+
+
+
+
+</body>
+
+</html>
+
+{% endblock %}
+
+
+{% block script %}
+<script type="text/javascript">
+  function copyToClipboard(element) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+  }
+
+  function sukses(){
+      var query1 = document.getElementById("qi1");
+      var query2 = document.getElementById("qi2");
+      var query3 = document.getElementById("qi3");
+      var query4 = document.getElementById("qi4");
+      var query5 = document.getElementById("qi5");
+      var query6 = document.getElementById("qi6");
+      var query7 = document.getElementById("qi7");
+      var query8 = document.getElementById("qi8");
+      var query9 = document.getElementById("qi9");
+      var query10 = document.getElementById("qi10")
+      var query11 = document.getElementById("qi11");
+      var query12 = document.getElementById("qi12");
+      var query13 = document.getElementById("qi13");
+      var query14 = document.getElementById("qi14");
+      var test = document.getElementById("save")
+
+      if(query1 != None){
+        alert("Query berhasil di input")
+        return false;
+      }
+      return true;
+
+  }
+
+</script>
+{% endblock %}

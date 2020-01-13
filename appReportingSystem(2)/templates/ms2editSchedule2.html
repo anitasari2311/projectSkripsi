@@ -1,0 +1,419 @@
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<!-- <style>
+  #myList {width: 200; list-style: none; margin: 0; auto 0 auto;}
+  #myList li {list-style-type: none; float: left; width: 100px;}
+  #myList li label{width: 200px; padding: 2px 10px 0 8px; display: inline-block;}
+</style> -->
+
+  <title> Edit Schedule </title>
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}
+  {% extends "NAVBARPROG.html" %}
+  {% set active_page = 'schedule' %}
+
+{% else %}
+
+  {% extends "NAVBARSPV.html" %}
+  {% set active_page = 'schedule' %}
+
+{% endif %}
+    
+
+{% block content %}
+    <br><br>
+    
+<div class ="judul">
+  <center>EDIT SCHEDULE</center>
+</div>
+
+
+
+{% if detailSchedule %}
+
+  <form action="/sendEditSchedule" method="POST">
+<div class="containInsert">
+
+<div class ="row">
+  <div class ="col-35">
+    <label for="kodeRep">Kode Report : </label>
+  </div>
+  
+  <div class="col-55">
+    {% if kode_laporan %}
+      <input type ="text" id="kodLap2" name="kodLap2" value="{{kode_laporan}}">
+    {% endif %}
+  </div>
+</div>
+
+<br>
+
+{% for row in detailSchedule %}
+<div class ="row">
+  <div class ="col-35">
+    <label for="header">Header : </label>
+  </div>
+
+  <div class="col-55">
+    <input type="text" name="header" value="{{row.report_judul}}" disabled>
+  </div>
+</div>
+
+<div class ="row">
+  <div class ="col-35">
+    <label for="keterangan">Keterangan : </label>
+  </div>
+
+  <div class="col-55">
+    <textarea id="keterangan" name="keterangan" disabled>{{row.report_deskripsi}}</textarea>
+  </div>
+</div>
+
+<div class ="row">
+  <div class ="col-35">
+    <label for="note">Note : </label>
+  </div>
+
+  <div class="col-55">
+    <input type="text" id="note" name="note" value="{{row.sch_note}}">
+  </div>
+</div>
+
+<!-- <div class ="row">
+  <div class ="col-15">
+    <label for="penerima">PIC : </label>
+  </div>
+    <textarea id="PIC" name="PIC">{{detailSchedule[3]}}</textarea>
+</div>
+<div class ="row">
+  <div class ="col-15">
+    <label for="penerima">Dikirim ke : </label>
+  </div>
+    <textarea id="penerima" name="penerima">{{detailSchedule[4]}}</textarea>
+</div> -->
+
+<div class ="row">
+  <div class ="col-35">
+    <label for="PIC">PIC: </label>
+  </div>
+
+  <div class ="myBoxPIC">
+           
+              <input type="text" id="myInput" onkeyup="funcSearchPIC()" placeholder="Search for names.." title="Type in a name">
+              <table id="list">
+                      <tr>
+                        <th></th>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                      </tr>
+                      
+                      {% for liPIC in listPIC %}
+                      
+
+                      <tr>
+                        
+                        <td>
+                          
+                          {% if liPIC.Email in row.sch_PIC %}
+                          <input type ="checkbox" name="{{liPIC.Id}}"  checked="checked"> 
+                          {% else %}
+                          <input type ="checkbox" name="{{liPIC.Id}}"> 
+                          {% endif %}
+                          
+                        </td>
+                        <td>{{liPIC.Id}}</td>
+                        <td>{{liPIC.Name}}</td>
+                        <td>{{liPIC.Email}}</td>
+
+
+                       
+                        
+                      </tr>
+                      {% endfor %}
+              </table>
+          
+    </div>
+</div>
+<br>
+
+<div class ="row">
+  <div class ="col-35">
+    <label for="Penerima">Penerima: </label>
+  </div>
+  
+  <div class ="myBoxPIC">
+           
+              <input type="text" id="myInput1" onkeyup="funcSearchPen()" placeholder="Search for names.." title="Type in a name">
+              <table id="listkedua">
+                      <tr>
+                        <th></th>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                      </tr>
+                  
+                      {% for liPen in listPen %}
+                      <tr>
+                        <td>
+                          {% if liPen.Email in row.sch_Pen %}
+
+                          <input type ="checkbox" name="{{liPen.Email}}" checked="checked">
+                          {% else %}
+                          <input type ="checkbox" name="{{liPen.Email}}">
+                          {% endif %}
+
+                        </td>
+                        <td>{{liPen.Id}}</td>
+                        <td>{{liPen.Name}}</td>
+                        <td>{{liPen.Email}}</td>
+                      </tr>
+                      {% endfor %}
+              </table>
+          
+  </div>
+</div>
+
+
+<div class ="row">
+  <div class ="col-35">
+    <label for="grouping">Grouping : </label>
+  </div>
+
+  <div class="col-55">
+    <input type="text" id="grouping" name="grouping" value="{{row.sch_groupBy}}">
+  </div>
+</div>
+
+
+
+
+<div class ="row">
+  <div class ="col-35">
+    <label for="grouping">Schedule : </label>
+  </div>
+
+  <div class="col-55">
+    {% if row.sch_tanggal == '' %}
+    <input type ="radio" id="dm" value="hb" name="rutin" onload="myFunction4('True')" onclick="myFunction2()" checked>Day+Month</input>
+    <input type ="radio" id="dm2" value="tb" name="rutin" onclick ="myFunction3()">Date+Month</input>
+
+
+    {% else %}
+    <input type ="radio" id="dm" value="hb" name="rutin" onclick="myFunction2()">Day+Month</input>
+    <input type ="radio" id="dm2" value="tb" name="rutin" onload="myFunction4('False')" onclick ="myFunction3()" checked>Date+Month</input>
+
+
+    {% endif %}
+  </div>
+</div>
+
+<br>
+
+
+<div class ="row">
+  <div class ="col-35" >
+
+  </div  style = "display: inline;">
+
+  <div class="col-55">
+
+
+    <div class ="myBox">
+          <div id="Day">
+            {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+            <ol style="list-style: none;">
+            <li>
+              {% if day in row.sch_hari %}
+                <input type="checkbox" name="{{day[:3]}}" value="{{day}}" checked="checked">{{day}}
+              {% else %}
+                <input type="checkbox" name="{{day[:3]}}" value="{{day}}">{{day}}
+              {% endif %}
+            </li>
+          </ol>
+            {% endfor %}
+          </div>
+    
+          <div id="Date">
+                  {% for date in ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
+                  '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+                  '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'] %}
+                  <ol style="list-style: none;">
+                  <li>
+                  
+                  
+                      {% if date in row.sch_tanggal %}
+                      <input type="checkbox" name="{{date[:3]}}" value="{{date}}" checked="checked">{{date}}
+                      {% else %}
+                      <input type="checkbox" name="{{date[:3]}}" value="{{date}}">{{date}}
+                      {% endif %}
+                    
+                   
+                  </li>
+                </ol>
+                  {% endfor %}
+          </div>
+      </div>
+         <div class ="myBox">
+          <div id="Month">
+            {% for month in ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
+            <ol style="list-style: none;">
+            <li>
+              {% if month in row.sch_bulan %}
+                <input type="checkbox" name="{{month[:3]}}" value="{{month}}" checked="checked">{{month}}
+              {% else %}
+                <input type="checkbox" name="{{month[:3]}}" value="{{month}}">{{month}}
+              {% endif %}
+            </li>
+          </ol>
+            {% endfor %}
+          </div>
+    </div>
+    </div>
+</div>
+
+
+
+<div class ="row">
+  <div class ="col-35">
+    <label for="grouping">Aktif : </label>
+  </div>
+
+  <div class="col-15">
+  {% if row.sch_aktifYN == 'Y' %}
+    <select name="aktifYND">             
+        <option name="aktifYN">{{row.sch_aktifYN}}</option>
+        <option name="aktifYN">D</option>
+    </select>
+  {% else %}
+    <select name="aktifYND">             
+        <option name="aktifYN">{{row.sch_aktifYN}}</option>
+        <option name="aktifYN">Y</option>
+    </select>
+  {% endif %}
+  </div>
+</div>
+{% endfor %}
+
+
+
+</div> <!-- akhiran div containInsert -->
+
+<center>
+      <div class="colBut">
+      <button class="submit">Save</button></div></form>
+
+<!-- 
+<form action="/deactivateSchedule" method="POST">
+  <button name="deactive" value="{{kode_laporan}}">Deactivate</button>
+</form> -->
+      <div class="colBut">
+        <form action="/admin/schedule/edit">
+          <button class="submitred">Cancel</button>
+        </form></div>
+
+</center>
+    
+
+{% else %}
+
+
+<center>
+<h3>Schedule for :</h3>
+<h2>{{kode_laporan}}</h2>
+<h3>Not found</h3>
+
+<p href="{url_for('/addSchedule')"> Click <a href="/addNewSchedule">here</a> to add Schedule </p> 
+
+<!-- <form action="/editSchedule"><button>Back</button></form> -->
+
+</center>
+
+{% endif %}
+</body>
+{% endblock %}
+
+
+
+
+{% block script %}
+<script>
+  /*                   RADIO BUTTON JADWAL            */
+  function myFunction2(){
+  var check1 = document.getElementById("dm");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+      if(check1.selected == false){ Days.style.display = "none"; Months.style.display ="none";}
+          else{ Days.style.display = "inline-block"; Months.style.display ="inline-block";
+                Dates.style.display ="none";}
+}
+function myFunction3(){
+  var check2 = document.getElementById("dm2");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+  if(check2.selected == false){ Dates.style.display = "none"}
+          else{ Dates.style.display = "inline-block"; Months.style.display ="inline-block";
+                Days.style.display ="none";}
+}
+function myFunction4(){
+  var check3 = document.getElementById("myCheck4");
+  var Months = document.getElementById("Month");
+   if(check3.checked == false){ Months.style.display = "none"}
+          else{ Months.style.display = "block";}
+}
+// function myFunction4(check){
+//   var Days = document.getElementById("Day");
+//   var Dates = document.getElementById("Date");
+//   if (check == "True"){
+//     Dates.style.display = "none"; 
+//   }else{
+//     Days.style.display = "none"; 
+//   }
+// }
+/*                     SEARCH BY NAME                   */
+function funcSearchPIC() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+function funcSearchPen() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput1");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("listkedua");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
+
+</html>
+{% endblock %}

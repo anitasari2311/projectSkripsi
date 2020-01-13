@@ -1,0 +1,256 @@
+<html>
+      <head>
+        <title>Detail Task</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+      </head>
+  <body bgcolor="#F0FFF0">
+      <div class="judul">
+        <center>DETAIL TASK</center>
+      </div>
+    <!-- <div class="container"> -->
+
+      <div class="containInsert">
+                  <div class="row">
+
+                      <div class="col-25">
+                        <label for="fname">Report Code</label>
+                      </div>
+
+                      <div class="col-75">{% for detail_task in detail_task %}
+                        {% if detail_task['requestKodeLaporan'] is none %}
+                        <input type="text" id="fname" name="namalaporan" placeholder="-" disabled>
+                        {% else %}
+                        <input type="text" id="fname" name="namalaporan" placeholder="{{detail_task['requestKodeLaporan']}}" disabled>
+                        {% endif %}
+                        
+                      </div>
+
+                    </div> 
+
+
+                  <div class="row">
+
+                      <div class="col-25">
+                        <label for="fname">Request Code</label>
+                      </div>
+
+                      <div class="col-75">
+                        <input type="text" id="fname" name="namalaporan" placeholder="{{detail_task['requestId']}}" disabled>
+                      </div>
+
+                    </div>  
+
+
+
+                  <div class="row">
+
+                    <div class="col-25">
+                      <label for="fname">Title</label>
+                    </div>
+
+                    <div class="col-75">
+                      <input type="text" id="fname" name="namalaporan" placeholder="{{detail_task['requestJudul']}}" disabled>
+                    </div>
+
+                  </div>
+
+
+                  <div class="row">
+
+                    <div class="col-25">
+                      <label for="fname">Purpose</label>
+                    </div>
+
+                    <div class="col-75">
+                      <input type="text" id="fname" name="namalaporan" placeholder="{{detail_task['requestTujuan']}}" disabled>
+                    </div>
+
+                  </div>
+
+
+                      <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Description</label>
+                        </div>
+
+                        <div class="col-75">
+                          <textarea id="subject" name="keteranganlaporan" placeholder="{{detail_task['requestDeskripsi']}}" style="height:200px" disabled></textarea>
+                        </div>
+                        
+                      </div>
+
+                      {% if detail_task['requestOrganisasi'] != "" and detail_task['requestOrganisasi'] is not none %}
+
+                      <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Organization</label>
+                        </div>
+
+                        <div class="col-75">
+                          <input type="text" placeholder="{{detail_task['requestOrganisasi']}}" disabled>
+                        </div>
+
+                      </div>
+                      {% endif %}
+
+                      {% if detail_task['requestKategori'] != "" and detail_task['requestKategori'] is not none %}
+
+                      <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Department</label>
+                        </div>
+
+                        <div class="col-75">
+                          <input type="text" placeholder="{{detail_task['requestKategori']}}" disabled>
+                        </div>
+
+                      </div>
+                      {% endif %}
+
+                    
+                    <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Display</label>
+                        </div>
+
+                        <div class="col-75">
+                          <input type="text" placeholder="{{detail_task['requestTampilan']}}" disabled>
+                        </div>
+
+                      </div>
+
+                      {% if detail_task['requestPeriode'] != "" and detail_task['requestPeriode'] is not none %}
+
+                      <div class="row">
+
+                        <div class="col-25">
+                          <label for="lname">Period</label>
+                        </div>
+
+                        <div class="col-75">
+                          <input type="text" placeholder="{{detail_task['requestPeriode']}}" disabled>
+                        </div>
+
+                      </div>
+                      {% endif %}
+
+                      <div class="row">
+
+                          <div class="col-25">
+                            <label for="lname">Deadline</label>
+                          </div>
+
+                          <div class="col-75">
+                             <input type="text" placeholder="{{detail_task['requestDeadline']}}" disabled>
+                          </div>
+
+                      </div>
+
+                      <div class="row">
+                          {% if checkImage != 'NOIMAGE' %}
+                          <div class="col-25">
+                            <label for="lname">File</label>
+                          </div>
+                          
+                          <div class="col-75">
+                             <img  src="/static/uploads/{{imageR}}" alt="{{imageR}}" style="width:100%">
+                          </div>
+                            {% else %}
+                            
+
+                          {% endif %}
+
+                      </div>
+                    
+                    <div class="row">
+
+                          <div class="col-25">
+                            <label for="lname">Schedule</label>
+                          </div>
+
+                          {% if detail_task['reqSchBulan'] != "" and detail_task['reqSchBulan'] is not none %}
+                          
+                          <div class="row">
+                          <div class="col-25">
+                            <label for="lname"> </label>
+                          </div>
+
+                          <div class="col-75">
+                             <label for="Date">Date</label>
+                             <input type="text" placeholder="{{detail_task['reqSchTanggal']}}" disabled>
+                          </div>
+
+
+                      </div>
+                      
+
+
+                      <div class="row">
+                          <div class="col-25">
+                            <label for="lname"> </label>
+                          </div>
+
+                          <div class="col-75">
+                            <label for="Day">Month</label>
+                            <input type="text" placeholder="{{detail_task['reqSchBulan']}}" disabled>
+                          </div>
+                      </div>
+
+                      
+                      <div class="row">
+                          <div class="col-25">
+                            <label for="lname">        </label>
+                          </div>
+
+                          <div class="col-75">
+                            <label for="Day">Day</label>
+                            <input type="text" placeholder="{{detail_task['reqSchHari']}}" disabled>
+                          </div>
+                      </div>
+                      {% else %}
+                        <div class="row">
+                          <div class="col-25">
+                            <label for="lname"> </label>
+                          </div>
+
+                          <div class="col-75">
+                            
+                            <input type="text" placeholder="-" disabled>
+                          </div>
+                      </div>
+                      {% endif %}
+
+      
+
+
+                           <br><br>              <center>
+
+            {% if detail_task['progId'] == '' or detail_task['progId'] is none %}
+
+            
+            <div class="colBut">
+              <form action ="/admin/task/available/{{detail_task['requestId']}}" method = "post">
+              <button class="submit" value="{{detail_task['requestId']}}" name="btnConfirmReq" >Accept</button></form></div>
+            
+            {% if session.get('position') == 'Admin' %}
+              <div class="colBut"><form action ="/admin/task/available">
+                <button class="submitRed" value="Cancel">Cancel</button></form></div>
+              {% else %}
+              <div class="colBut"><form action ="/spv/task/available">
+                <button class="submitRed" value="Cancel">Cancel</button></form></div>
+              {% endif %}
+            {% endif %} <!-- ENDIF DETAILTASK[PROG_ID] -->
+            {% endfor %}
+          </center>
+
+
+       </div>
+
+    </div>
+
+  </body>
+</html>

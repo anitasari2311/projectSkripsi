@@ -1,0 +1,60 @@
+<html>
+<head>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+  <title>Format Template</title>
+
+</head>
+
+<body bgcolor="#F0FFF0">
+
+{% if session.get('position') == 'Admin' %}
+    {% extends "NAVBARPROG.html" %}
+    {% set active_page = 'template' %}
+
+{% else %}
+    {% extends "NAVBARSPV.html" %}
+    {% set active_page = 'template' %}
+    
+{% endif %}    
+
+{% block content %}
+<br><br>
+
+  <div class ="judul">
+    <center>COPY TEMPLATE</center>
+  </div>
+
+<br><br>
+
+<form action="/admin/template/copyTemplate" autocomplete="off" method = "POST">
+<center>
+  <div class="containEdit">
+      <div class="tulisan" style="width: 350px; text-align: left;">
+          <label for="kodLap"> Copy From:  </label>
+          <input name="kodLap" list="report" required>
+          <datalist id= "report" name= "kodLap">
+              {% for report in listKodeReport %}
+                <option name = "kodLap" value="{{report.report_id}}">{{report.report_id}}</option>
+              {% endfor %}
+          </datalist>
+      </div>
+
+<br><br><br><br>
+      <div class="colBut">
+        <button class="submit"> Go </button></div>
+      </form>
+      
+      <div class="colBut">
+        <form action="/admin/home">
+          <button class="submitRed"> Cancel </button>
+        </form>
+      </div>
+
+  
+  </div> <!-- punya contain edit -->
+  
+</center>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,522 @@
+<html>
+<head>
+  <title>Edit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styleUser.css') }}">
+</head>
+<body bgcolor="F0FFF0">
+
+{% extends "ms1NAVBAR.html" %}
+{% set active_page = 'editReport' %}
+
+{% block content %}
+<br><br>
+<center>
+  <div class="judul">EDIT REPORT</div>
+</center>
+
+{% if kode_laporan %}
+    <div class="containerEdit">
+
+      <form action='/sendEditRequest' method="POST" enctype="multipart/form-data">
+
+        <div class="row">
+            <div class="col-25">
+              <label for="fname">Kode Laporan</label>
+            </div>
+
+            <div class="col-25">
+              <input type="text" name ="labelKodLap" value="{{kode_laporan}}">
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-25">
+              <label for="fname">Current Display</label> 
+            </div>
+
+            <div class="col-75">
+              {% if listcurrentdisplay %}
+                <label>{{listcurrentdisplay}}</label>
+              {% endif %}
+            </div>
+        </div>
+ 
+
+        <div class="row">
+          <div class="col-25">
+            <label for="fname">New Display</label>
+          </div>
+
+          <div class="col-75">
+            <input type="text" id="inputNum" name="inputNewDisplay" 
+            placeholder="Ex: Procon, Comco, OutCode">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-25">
+            <label for="fname"></label>
+          </div>
+        </div>
+    
+        <div class= "row">
+          <div class= "col-25" id="demo"></div>
+        </div>
+                
+        <div class="row">
+
+        </div>
+
+        <div class="row">
+          <div class="col-25">
+            <label for="lname">Desired Change</label>
+          </div>
+          <div class="col-75">
+            <textarea id="subject" name="inputFilterBaru" placeholder="Ex: sales > 500000" style="height:200px"></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="col-25">
+                <label for="fname">Period</label>
+            </div>
+
+            <div class="col-75">
+                 <input type="text" id="fname" name="inputPeriode" placeholder="Ex: B1- B3 or YYYY-YYYY or DD/MM/YYYY">
+            </div>
+          </div>
+
+
+        <div class="row">
+            <div class="col-25">
+              <label for="deadline">Deadline</label>
+            </div>
+
+            <div class="col-25">
+                <input type="date" name="deadline" onchange="valDeadline(this)">
+            </div>
+        </div>
+
+          <div class="row">
+            <div class = "col-25">
+              <tr>
+                <td valign ="top">
+                  <label for="attach_file">Attachment</label>
+                </td>
+            </div>
+              <div>
+                <td valign="top">
+                  <input type ="file" name="inputFile" value ="Attach File" accept="/image*">
+                </td>
+              </div>
+                <td valign="top">
+                  <label for ="attach_file">No file selected </label>
+                </td>
+              </tr>
+          </div>
+
+
+                  <div class="row">
+                    <div class="col-25">
+                      <label for="fname"></label>
+                    </div>
+
+                    <div class="col-25">               
+                     <input type="checkBox" name="routine" id="myCheck"  onclick="myFunction()">Routine
+                      <br><br>
+                 
+                    </div>
+                  </div>
+
+
+              <div class="row"  id ="text2" style="display:none">
+                <div class="col-25">
+                  <label for="fname"></label>
+                </div>
+
+
+                <div class="col-25">               
+                  <!-- HARIBULAN TANGGAL BULAN -->
+                  <input type ="radio" id="dm" value="hb" name="rutin" onclick="myFunction2()">Day+Month</input>
+                  <input type ="radio" id="dm2" value="tb" name="rutin" onclick ="myFunction3()">Date+Month</input>
+
+                </div>
+              </div>
+
+
+
+              <div class="row">
+              <div class="col-25">
+                <label for="fname"></label>
+              </div>
+                  
+          <div class ="row" id="text" style="display:none">
+              <div id="Day" style="display: none">
+                <div class ="myBox" >
+                  <input type="checkbox" name="mon" 
+                  value="Monday">Monday<br>
+                  <input type="checkbox" name="tue" 
+                  value="Tuesday">Tuesday<br>
+                  <input type="checkbox" name="wed" 
+                  value="Wednesday">Wednesday<br>
+                  <input type="checkbox" name="thu" 
+                  value="Thursday">Thursday<br>
+                  <input type="checkbox" name="fri" 
+                  value="Friday">Friday<br>
+                  <input type="checkbox" name="sat" 
+                  value="Saturday">Saturday<br>
+                  <input type="checkbox" name="sun" 
+                  value="Sunday">Sunday<br>
+                </div>
+              </div>
+
+            <div id="Date" style="display: none">
+              <div class ="myBox" >
+                <input type="checkbox" name="t1" value="1">1<br>
+                <input type="checkbox" name="t2" value="2">2<br>
+                <input type="checkbox" name="t3" value="3">3<br>
+                <input type="checkbox" name="t4" value="4">4<br>
+                <input type="checkbox" name="t5" value="5">5<br>
+                <input type="checkbox" name="t6" value="6">6<br>
+                <input type="checkbox" name="t7" value="7">7<br>
+                <input type="checkbox" name="t8" value="8">8<br>
+                <input type="checkbox" name="t9" value="9">9<br>
+              
+                <input type="checkbox" name="t10" value="10">10<br>
+                <input type="checkbox" name="t11" value="11">11<br>
+                <input type="checkbox" name="t12" value="12">12<br>
+                <input type="checkbox" name="t13" value="13">13<br>
+                <input type="checkbox" name="t14" value="14">14<br> 
+                <input type="checkbox" name="t15" value="15">15<br>
+                <input type="checkbox" name="t16" value="16">16<br>
+                <input type="checkbox" name="t17" value="17">17<br>
+                <input type="checkbox" name="t18" value="18">18<br>
+              
+                <input type="checkbox" name="t19" value="19">19<br>
+                <input type="checkbox" name="t20" value="20">20<br>
+                <input type="checkbox" name="t21" value="21">21<br> 
+                <input type="checkbox" name="t22" value="22">22<br>
+                <input type="checkbox" name="t23" value="23">23<br>
+                <input type="checkbox" name="t24" value="24">24<br>
+                <input type="checkbox" name="t25" value="25">25<br>
+                <input type="checkbox" name="t26" value="26">26<br>
+                <input type="checkbox" name="t27" value="27">27<br>
+              
+                <input type="checkbox" name="t28" value="28">28<br>
+                <input type="checkbox" name="t29" value="29">29<br>
+                <input type="checkbox" name="t30" value="30">30<br>
+                <input type="checkbox" name="t31" value="31">31<br>
+              </div> 
+            </div>   
+
+            <div class="row">
+              <div class="col-25">
+                <label for="fname"></label>
+              </div>
+
+              <div  id="Month" style="display: none">
+                <div class ="myBox" >
+                  
+                  <input type="checkbox" name="Jan" 
+                  value="January">January<br>
+                  <input type="checkbox" name="Feb" 
+                  value="February">February<br>
+                  <input type="checkbox" name="Mar" 
+                  value="March">March<br>
+                  <input type="checkbox" name="Apr" 
+                  value="April">April<br>
+                  <input type="checkbox" name="Mei" 
+                  value="May">May<br> 
+                  <input type="checkbox" name="Jun" 
+                  value="June">June<br>
+               
+                  <input type="checkbox" name="Jul" 
+                  value="July">July<br>
+                  <input type="checkbox" name="Agus" 
+                  value="August">August<br>
+                  <input type="checkbox" name="Sept" 
+                  value="September">September<br>
+                  <input type="checkbox" name="Okt" 
+                  value="October">October<br>
+                  <input type="checkbox" name="Nov" 
+                  value="November">November<br>
+                  <input type="checkbox" name="Des" 
+                  value="December">December<br>
+                </div>
+              </div>
+                
+                 <div class="row">
+                    <div class="col-25">
+                        <label for="fname"></label>
+                    </div>
+                  
+                  </div>
+                    
+                    <div class="row">
+                    <div class="col-25">
+                        <label for="fname">Send to</label>
+                    </div>
+
+                        <div class ="row" id="text">
+                          <div class ="col-25" >
+
+                            
+                            <div class="row" id="text">
+                              <div class="" style="width: 500px">
+                                <label for="fname">PIC (Orang yang bertanggung jawab atas tindak lanjut laporan)</label>
+                              </div>
+                            </div>
+
+      <div class ="myBoxPIC">
+           
+              <input type="text" id="myInput" onkeyup="myFunction5()" placeholder="Search by name" title="Type in a name">
+              <table id="list">
+                      <tr>
+                        <th></th>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                      </tr>
+                  
+                      {% for liPIC in listPIC %}
+                      <tr>
+                        <td><input type ="checkbox"  value ="{{liPIC['Id']}}"></td>
+                        <td>{{liPIC['Id']}}</td>
+                        <td>{{liPIC['Name']}}</td>
+                        <td>{{liPIC['Email']}}</td>
+                      </tr>
+                      {% endfor %}
+              </table>
+          
+      </div>
+              
+
+            <br>
+
+     
+                          </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                    <div class="col-25">
+                        <label for="fname"></label>
+                    </div>
+                    <br>
+                     <div class ="row" id="text">
+                         <div class ="col-25" >
+
+                            <div class="row" id="text">
+                              <div class="" style="width: 500px">
+                                <label for="fname">Penerima(CC)</label>
+                              </div>
+                            </div>
+
+
+            <div class ="myBoxPIC">
+              <input type="text" id="myInput1" onkeyup="myFunction6()" placeholder="Search by name" title="Type in a name">
+              <table id="listkedua">
+                      <tr>
+                        <th></th>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                      </tr>
+                  
+                      {% for liPen in listPen %}
+                      <tr>
+                        <td><input type ="checkbox"  value ="{{liPen['Email']}}"></td>
+                        <td>{{liPen['Id']}}</td>
+                        <td>{{liPen['Name']}}</td>
+                        <td>{{liPen['Email']}}</td>
+                      </tr>
+                      {% endfor %}
+              </table>
+            </div>
+
+                                                  
+                          </div>
+                        </div>
+
+</div></div>
+
+              <br><br><br><br>
+
+            
+        </div>
+        <br>
+
+          <center>              
+                <div class="colBut">
+                  <button class="submit" name="submit" 
+                  value="Submit">Submit</button>
+                </form></div>
+    
+                
+                <div class="colBut">
+                  <form action="/user/editReport">
+                    <button class="submitRed" name="cancel" 
+                    value="Cancel">Cancel</button>
+                  </form>         
+                </div>
+
+            </center>
+
+        </body>
+        <br><br><br>
+
+{% else %}
+<!-- EDIT REPORT HOME -->
+  <center>
+<div class="containEdit">
+           <div class="row" style="display: block;">
+              <!-- <div class="tulisan" style="width: 350px; text-align: left"> -->
+                <!-- <label for="reportCode">Report Code</label> -->
+                <br><br>
+
+                <form action= "/user/editReport" method = 'POST'>
+                  <input name="kodeLaporan" list="kodeReport" required style="width: 200px; height: 30px" placeholder="Report Code">
+                  <br><br><br>
+
+                  <datalist id="kodeReport">
+                    {% for row in listKodeReport %}
+                    <option value="{{row['ReportId']}}">{{row['ReportJudul']}}
+                    {% endfor %}
+                  </datalist>
+           <!-- </div> -->
+         </option>
+    <br><br><br>
+              <div class="colBut">
+                <button id="tombolSubmit" class="submit" value="edit" type="submit">Submit</button></div>
+                  </form>
+<!-- 
+              <div class="colBut">
+                  <form action="/user/home">
+                    <button class="submitRed" >Cancel</button>
+              </div></form> -->
+
+  {% endif %}
+
+ 
+</div>
+ </center>
+
+</body>
+</html>
+{% endblock %}
+
+{% block script %}
+<script>
+function myFunction() {
+  var checkBox = document.getElementById("myCheck");
+  var text = document.getElementById("text");
+  var text2 = document.getElementById("text2");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+  var check1 = document.getElementById("myCheck2");
+  var check2 = document.getElementById("myCheck3");
+  var check3 = document.getElementById("myCheck4");
+  if (checkBox.checked == true){
+    text.style.display = "block";
+    text2.style.display = "block";
+  } else {
+    text.style.display = "none";
+    text2.style.display = "none";
+    Days.style.display = "none";
+    Dates.style.display = "none";
+    Months.style.display = "none";
+    check1.checked = false
+    check2.checked = false
+    check3.checked = false
+  }
+}
+function myFunction2(){
+  var check1 = document.getElementById("dm");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+      if(check1.selected == false){ Days.style.display = "none"; Months.style.display ="none";}
+          else{ Days.style.display = "block"; Months.style.display ="block";
+                Dates.style.display ="none";}
+
+}
+function myFunction3(){
+  var check2 = document.getElementById("dm2");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+  if(check2.selected == false){ Dates.style.display = "none"}
+          else{ Dates.style.display = "block"; Months.style.display ="block";
+                Days.style.display ="none";}
+}
+
+function myFunction4(){
+  var check3 = document.getElementById("myCheck4");
+  var Months = document.getElementById("Month");
+   if(check3.checked == false){ Months.style.display = "none"}
+          else{ Months.style.display = "block";}
+}       
+
+/*                     SEARCH BY NAME                   */
+function myFunction5() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+function myFunction6() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput1");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("listkedua");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+function valDeadline(formfield){
+  var today = new Date()
+  var deadline = new Date(formfield.value)
+  var minimalDate = new Date()
+  minimalDate.setDate(today.getDate()+2)
+
+  if(deadline < minimalDate){
+    
+    alert("Deadline minimal 2 hari setelah request")
+  }
+}
+
+$(document).ready(function(){
+    $('#tombolSubmit').click(function(){
+      alert('Success');
+    });   
+  });
+
+</script>
+{% endblock %}

@@ -1,0 +1,440 @@
+  <html>
+  <head>
+         <title>Add New Schedule</title>
+         <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+  </head>
+
+  <body bgcolor="#F0FFF0">
+    
+{% if session.get('position') == 'Admin' %}
+
+  {% extends "NAVBARPROG.html" %}
+  {% set active_page = 'schedule' %}
+{% else %}
+
+  {% extends "NAVBARSPV.html" %}
+  {% set active_page = 'schedule' %}
+{% endif %}
+{% block content %}
+    <br><br>
+
+      <center> <div class="judul">INSERT SCHEDULE</div></center>
+
+      <div class="containInsert">
+        <form action = "/sendAddNewSchedule" autocomplete="off" method ='POST' enctype="multipart/form-data">
+          <div class ="row">
+            <div class ="col-35">
+              <label for="kodeReport">Choose Report</label>
+            </div>
+
+          <div class="col-55">
+            <input type="" name="valKode" list="listKodeR">
+              <datalist id="listKodeR">
+                {% for row in listKodeReportS %}
+                  <option value="{{row.reportId}}"></option>
+                {% endfor %}
+              </datalist>
+        </div>
+      </div>
+
+
+
+          <!-- <div class ="row">
+            <div class ="col-35">
+              <label for="header">Header</label>
+            </div>
+
+            <div class="col-55">
+              <textarea id="header" name="header"></textarea>
+            </div>
+          </div>        
+
+          <div class ="row">
+            <div class ="col-35">
+              <label for="keterangan">Description</label>
+            </div>
+
+            <div class="col-55">
+              <textarea id="keterangan" name="keterangan"></textarea>
+            </div>
+          </div> -->
+
+<!--           <div class ="row">
+            <div class ="col-35">
+              <label for="priority">Priority</label>
+            </div>
+
+            <div class="col-55">
+              <select name="prioritasSchedule">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+          </div>
+
+          <div class ="row">
+            <div class ="col-35">
+              <label for="priority">Time</label>
+            </div>
+
+            <div class="col-55">
+              <select name="jamSchedule">
+                <option value=""></option>
+                <option value="01">01:00</option>
+                <option value="02">02:00</option>
+                <option value="03">03:00</option>
+                <option value="04">04:00</option>
+                <option value="05">05:00</option>
+                <option value="06">06:00</option>
+                <option value="07">07:00</option>
+                <option value="08">08:00</option>
+                <option value="09">09:00</option>
+                <option value="10">10:00</option>
+                <option value="11">11:00</option>
+                <option value="12">12:00</option>
+                <option value="13">13:00</option>
+                <option value="14">14:00</option>
+                <option value="15">15:00</option>
+                <option value="16">16:00</option>
+                <option value="17">17:00</option>
+                <option value="18">18:00</option>
+                <option value="19">19:00</option>
+                <option value="20">20:00</option>
+                <option value="21">21:00</option>
+                <option value="22">22:00</option>
+              </select>
+            </div>
+          </div>
+ -->
+          <div class ="row">
+            <div class ="col-35">
+              <label for="note">Note</label>
+            </div>
+
+            <div class="col-55">
+              <input type="text" id="note" name="note" placeholder="">
+            </div>
+          </div>
+                        
+          <div class="row">
+              <div class="col-35">
+                  <label for="fname">PIC</label>
+              </div>
+
+              <div class ="myBoxPIC">
+                <input type="text" id="myInput" 
+                onkeyup="myFunction5()" placeholder="Search by name" title="Type in a name">
+                <table id="list">
+                        <tr>
+                          <th></th>
+                          <th>User ID</th>
+                          <th>Username</th>
+                          <th>Email</th>
+                        </tr>
+                    
+                        {% for liPIC in listPIC %}
+                        <tr>
+                          <td><input type ="checkbox" 
+                          name="{{liPIC['Id']}}"  value =""></td>
+                          <td>{{liPIC['Id']}}</td>
+                          <td>{{liPIC['Name']}}</td>
+                          <td>{{liPIC['Email']}}</td>
+                        </tr>
+                        {% endfor %}
+                </table>
+            </div>
+          </div>
+
+<br>
+      
+          <div class="row">
+              <div class="col-35">
+                  <label for="fname">Receiver</label>
+              </div>
+                           
+              <div class ="myBoxPIC">
+                      <input type="text" id="myInput1" 
+                      onkeyup="myFunction6()" placeholder="Search by name" title="Type in a name">
+                      <table id="listkedua">
+                        <tr>
+                          <th></th>
+                          <th>User ID</th>
+                          <th>Username</th>
+                          <th>Email</th>
+                        </tr>
+                    
+                        {% for liPen in listPen %}
+                        <tr>
+                          <td><input type ="checkbox" name="{{liPen['Email']}}" value =""></td>
+                          <td>{{liPen['Id']}}</td>
+                          <td>{{liPen['Name']}}</td>
+                          <td>{{liPen['Email']}}</td>
+                        </tr>
+                        {% endfor %}
+                      </table>
+              </div>
+            </div>
+            <br>
+
+            <div class ="row">
+              <div class ="col-35">
+                <label for="grouping">Grouping</label>
+              </div>
+
+              <div class="col-55">
+                <input type="text" id="grouping" name="grouping" placeholder="">
+              </div>
+            </div>
+
+            <div class="row"  id ="text2">
+              <div class="col-35">
+                <label for="Schedule">Schedule</label>
+              </div>
+
+              <div class="col-55">               
+                <input type ="radio" id="dm" value="hb" name="rutin" 
+                onclick="myFunction2()">Day+Month</input>
+                <input type ="radio" id="dm2" value="tb" name="rutin" onclick ="myFunction3()">Date+Month</input>
+              </div>
+            </div>
+            
+
+          <div class="row">
+              <div class="col-35">
+                <label for="fname"></label>
+              </div>
+
+          <div class ="row" id="text" >
+              <div id="Day" style="display: none">
+                <div class ="myBox" >
+                  <input type="checkbox" name="mon" 
+                  value="Monday">Monday<br>
+                  <input type="checkbox" name="tue" 
+                  value="Tuesday">Tuesday<br>
+                  <input type="checkbox" name="wed" 
+                  value="Wednesday">Wednesday<br>
+                  <input type="checkbox" name="thu" 
+                  value="Thursday">Thursday<br>
+                  <input type="checkbox" name="fri" 
+                  value="Friday">Friday<br>
+                  <input type="checkbox" name="sat" 
+                  value="Saturday">Saturday<br>
+                  <input type="checkbox" name="sun" 
+                  value="Sunday">Sunday<br>
+                </div>
+              </div>
+
+            <div id="Date" style="display: none">
+              <div class ="myBox" >
+                <input type="checkbox" name="t1" value="01">01<br>
+                <input type="checkbox" name="t2" value="02">02<br>
+                <input type="checkbox" name="t3" value="03">03<br>
+                <input type="checkbox" name="t4" value="04">04<br>
+                <input type="checkbox" name="t5" value="05">05<br>
+                <input type="checkbox" name="t6" value="06">06<br>
+                <input type="checkbox" name="t7" value="07">07<br>
+                <input type="checkbox" name="t8" value="08">08<br>
+                <input type="checkbox" name="t9" value="09">09<br>
+              
+                <input type="checkbox" name="t10" value="10">10<br>
+                <input type="checkbox" name="t11" value="11">11<br>
+                <input type="checkbox" name="t12" value="12">12<br>
+                <input type="checkbox" name="t13" value="13">13<br>
+                <input type="checkbox" name="t14" value="14">14<br> 
+                <input type="checkbox" name="t15" value="15">15<br>
+                <input type="checkbox" name="t16" value="16">16<br>
+                <input type="checkbox" name="t17" value="17">17<br>
+                <input type="checkbox" name="t18" value="18">18<br>
+              
+                <input type="checkbox" name="t19" value="19">19<br>
+                <input type="checkbox" name="t20" value="20">20<br>
+                <input type="checkbox" name="t21" value="21">21<br> 
+                <input type="checkbox" name="t22" value="22">22<br>
+                <input type="checkbox" name="t23" value="23">23<br>
+                <input type="checkbox" name="t24" value="24">24<br>
+                <input type="checkbox" name="t25" value="25">25<br>
+                <input type="checkbox" name="t26" value="26">26<br>
+                <input type="checkbox" name="t27" value="27">27<br>
+              
+                <input type="checkbox" name="t28" value="28">28<br>
+                <input type="checkbox" name="t29" value="29">29<br>
+                <input type="checkbox" name="t30" value="30">30<br>
+                <input type="checkbox" name="t31" value="31">31<br>
+              </div> 
+            </div>   
+
+            <div class="row">
+              <div class="col-35">
+                <label for="fname"></label>
+              </div>
+
+              <div  id="Month" style="display: none">
+                <div class ="myBox" >
+                  
+                  <input type="checkbox" name="Jan" 
+                  value="January">January<br>
+                  <input type="checkbox" name="Feb" 
+                  value="February">February<br>
+                  <input type="checkbox" name="Mar" 
+                  value="March">March<br>
+                  <input type="checkbox" name="Apr" 
+                  value="April">April<br>
+                  <input type="checkbox" name="Mei" 
+                  value="May">May<br> 
+                  <input type="checkbox" name="Jun" 
+                  value="June">June<br>
+               
+                  <input type="checkbox" name="Jul" 
+                  value="July">July<br>
+                  <input type="checkbox" name="Agus" 
+                  value="August">August<br>
+                  <input type="checkbox" name="Sept" 
+                  value="September">September<br>
+                  <input type="checkbox" name="Okt" 
+                  value="October">October<br>
+                  <input type="checkbox" name="Nov" 
+                  value="November">November<br>
+                  <input type="checkbox" name="Des" 
+                  value="December">December<br>
+                </div>
+              </div>
+
+        
+        </div>
+      </form>
+        <br><br>
+        <center>
+          <div class="colBut">
+            <button class="Submit" name='Button_press' value="Submit">Submit</button></div>
+          
+          {% if session.get('position') == 'Admin' %}
+            <div class="colBut">   
+               <form action="/admin/home">
+                  <button class="submitRed">Cancel</button>
+               </form>
+            </div>
+          {% else %}
+            <div class="colBut">   
+               <form action="/spv/home">
+                  <button class="submitRed">Cancel</button>
+               </form>
+            </div>
+          {% endif %}
+        </center>
+        {% endblock %}
+        </body>
+</html>
+
+{% block script %}
+<script>
+function myFunction() {
+  var checkBox = document.getElementById("myCheck");
+  var text = document.getElementById("text");
+  var text2 = document.getElementById("text2");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+  var check1 = document.getElementById("myCheck2");
+  var check2 = document.getElementById("myCheck3");
+  var check3 = document.getElementById("myCheck4");
+  if (checkBox.checked == true){
+    text.style.display = "block";
+    text2.style.display = "block";
+  } else {
+    text.style.display = "none";
+    text2.style.display = "none";
+    Days.style.display = "none";
+    Dates.style.display = "none";
+    Months.style.display = "none";
+    check1.checked = false
+    check2.checked = false
+    check3.checked = false
+  }
+}
+
+
+function myFunction2(){
+  var check1 = document.getElementById("dm");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+      if(check1.selected == false){ Days.style.display = "none"; Months.style.display ="none";}
+          else{ Days.style.display = "block"; Months.style.display ="block";
+                Dates.style.display ="none";}
+}
+function myFunction3(){
+  var check2 = document.getElementById("dm2");
+  var Days = document.getElementById("Day");
+  var Dates = document.getElementById("Date");
+  var Months = document.getElementById("Month");
+  if(check2.selected == false){ Dates.style.display = "none"}
+          else{ Dates.style.display = "block"; Months.style.display ="block";
+                Days.style.display ="none";}
+}
+
+
+function myFunction4(){
+  var check3 = document.getElementById("myCheck4");
+  var Months = document.getElementById("Month");
+   if(check3.checked == false){ Months.style.display = "none"}
+          else{ Months.style.display = "block";}
+}
+
+/*                     SEARCH BY NAME                   */
+function myFunction5() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+function myFunction6() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput1");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("listkedua");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+
+function valDeadline(formfield){
+  var today = new Date()
+  var deadline = new Date(formfield.value)
+  var minimalDate = new Date()
+  minimalDate.setDate(today.getDate()+2)
+
+  if(deadline < minimalDate){
+    alert("Deadline minimal 2 hari setelah request")
+  }else{
+    alert("Success")
+  }
+}
+
+
+</script>
+
+{% endblock %}

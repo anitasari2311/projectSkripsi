@@ -1,0 +1,48 @@
+<html>
+<body>
+<select id="selectNumber">
+    <option>Choose a number</option>
+</select>
+
+
+<button onclick="namaKolom(28)">TEST</button>
+
+</body>
+
+<script src="C:\appReportingSystemFix\static\math.min.js"></script>
+<script type="text/javascript">
+	
+function namaKolom(jmlKolom){
+	var select = document.getElementById("selectNumber");
+	var arr = [];
+	var Character = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	for (i = 1; i <= jmlKolom; i++){
+		if (i<=25){
+			var kolom = Character.substr(i,1)+'8';
+			
+			arr.push(kolom);
+			
+		}
+		else{
+			var i1 = math.floor(i/(Character.length))-1;
+			var i2 = ((i - (math.floor(i/(Character.length)) -1)) - (25*(math.floor(i/(Character.length))))) - 1;
+			var kolom = Character.substr(i1,1) + Character.substr(i2,1)+'8';
+			arr.push(kolom);
+			
+		}
+	}
+	console.log(arr)
+
+	for(var i = 0; i < arr.length; i++) {
+	    var opt = arr[i];
+	    var el = document.createElement("option");
+	    el.textContent = opt;
+	    el.value = opt;
+	    select.appendChild(el);
+		}
+
+}
+
+
+</script>
+</html>

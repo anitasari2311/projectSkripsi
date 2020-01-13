@@ -1,0 +1,224 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head %}
+    
+    {% endblock %}
+  </head>
+  <body bgcolor="#F0FFF0">
+
+    <div id="navbar">
+
+        <div class="topnav"><ul>
+          {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div id="successMessage" class="alert alert-primary alert-dismissible fade show" role="alert"
+            style="background-color: #4CAF50;height: 50px;font-size: 20px;font-weight: 750">
+                <center><span style="color:white;">{{ message }}</span></center>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        
+          <li><img src="/static/images/logoPharos.png" style="width: 90px; border: 0"></li>
+          
+          <!-- <div class="topnav-right"> -->
+
+            {% if active_page == 'home' %}
+              <li class="active"><a href="/spv/home">HOME</a></li>
+              {% else %}
+              <li><a href="/spv/home">HOME</a></li>
+            {% endif %}
+            
+            {% if active_page == 'task' %}
+            <div class="dropdown">
+              <button class="active">TASK
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {% else %}
+            <div class="dropdown">
+              <button class="dropbtn">TASK
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {%endif%}
+
+              <div class="dropdown-content">
+                <a href="/spv/task/available">AVAILABLE TASK</a>
+                <a href="/spv/task/onProgress">ON PROGRESS TASK</a>
+                <a href="/spv/task/list">LIST TASK</a>
+                <a href="/spv/task/history">HISTORY TASK</a>
+              </div>
+            </div>
+            
+            {% if active_page == 'template' %}
+            <div class="dropdown">
+              <button class="active">TEMPLATE
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {% else %}
+            <div class="dropdown">
+              <button class="dropbtn">TEMPLATE
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {%endif%}
+
+              <div class="dropdown-content">
+                <a href="/spv/template/new">NEW TEMPLATE</a>
+                <a href="/spv/template/edit">EDIT TEMPLATE</a>
+              </div>
+            </div>
+
+
+            {% if active_page == 'query' %}
+            <div class="dropdown">
+              <button class="active">QUERY
+                <i class="fa fa-caret-down"></i>
+              </button>
+            {% else %}
+            <div class="dropdown">
+              <button class="dropbtn">QUERY
+                <i class="fa fa-caret-down"></i>
+              </button>
+              {% endif %}
+
+
+              <div class="dropdown-content">
+                <a href="/spv/query/new">NEW QUERY</a>
+                <a href="/spv/query/edit">EDIT QUERY</a>
+              </div>
+            </div>
+
+            {% if active_page == 'preview' %}
+              <li class="active"><a href="preview">PREVIEW</a></li>
+            {% else %}
+              <li><a href="/spv/preview">PREVIEW</a></li>
+            {% endif %}
+
+
+            {% if active_page == 'schedule' %}
+            <div class="dropdown">
+              <button class="active">SCHEDULING
+                <i class="fa fa-caret-down"></i>
+              </button>
+              {% else %}
+            <div class="dropdown">
+              <button class="dropbtn">SCHEDULING
+                <i class="fa fa-caret-down"></i>
+              </button>
+              {% endif %}
+
+
+              <div class="dropdown-content">
+                <a href="/spv/schedule/new">NEW SCHEDULE</a>
+                <a href="/spv/schedule/edit">EDIT SCHEDULE</a>
+                <a href="/spv/schedule/run">RUN SCHEDULE</a>
+              </div>
+            </div>
+
+            {% if active_page == 'report' %}
+              <li class="active"><a href="/spv/listReport">LIST REPORT</a></li>
+            {% else %}
+              <li><a href="/spv/listReport">LIST REPORT</a></li>
+            {% endif %}
+
+            {% if active_page == 'setting' %}  
+              <div class="dropdown">
+                <button class="active">SETTING
+                  <i class="fa fa-caret-down"></i>
+                </button>
+            {% else %}
+              <div class="dropdown">
+                <button class="dropbtn">SETTING
+                  <i class="fa fa-caret-down"></i>
+                </button>
+            {% endif %}
+            
+                <div class="dropdown-content">
+                  <a href="/spv/setting/kategori/add">DIVISION</a>
+                  <a href="/spv/setting/organisasi/add">ORGANIZATION</a>
+                  <a href="/spv/setting/server/add">SERVER</a>
+                </div>
+              </div>
+            
+            {% if active_page == 'account' %}
+              <div class="dropdown">
+                <button class="active">ACCOUNT
+                  <i class="fa fa-caret-down"></i>
+                </button>
+            {% else %}
+              <div class="dropdown">
+                <button class="dropbtn">{{session['username']}}
+                  <i class="fa fa-caret-down"></i>
+                </button>
+            {% endif %}
+
+                <div class="dropdown-content">
+                  <a href="/spv/profile">PROFILE</a>
+                  <a href="/logout">LOGOUT</a>
+                </div>
+              </div>
+
+
+          <!-- </div> --> <!-- DIV TOPNAV RIGHT -->
+        </ul>
+
+          </div> <!-- DIV TOPNAV -->
+        
+    </div> <!-- DIV NAVBAR -->
+
+    
+
+    <div id="content">{% block content %}
+
+    {% endblock %}</div>
+
+
+    <div id="script">
+    {% block script %}
+    {% endblock %}
+  </div>
+    <!-- </div> -->
+
+
+    
+
+
+    <div id="footer" style="position: fixed; bottom:0;">
+      {% block footer %}
+      <br><br><br>
+      &copy; Copyright 2019 by <a href="http://domain.invalid/">you</a>.
+      {% endblock %}
+    </div>
+
+
+
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+
+    <script>
+    window.onscroll = function() {scrollFunc()};
+
+    var navbar = document.getElementById("navbar");
+    var sticky = navbar.offsetTop;
+
+    function scrollFunc() {
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky")
+      } else {
+        navbar.classList.remove("sticky");
+      }
+    }
+
+    $(document).ready(function(){
+        $("#successMessage").delay(3000).slideUp(300);
+
+    });
+
+      
+    
+
+  </script>
+  </body>
+</html>

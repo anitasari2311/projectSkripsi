@@ -1,0 +1,131 @@
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleUser.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block head %}
+
+    {% endblock %}
+  </head>
+  <body bgcolor="#F0FFF0">
+
+<div id="myTopnav">
+<div class="topnav"><ul>
+          {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div id="successMessage" class="alert alert-primary alert-dismissible fade show" role="alert"
+            style="background-color: #4CAF50;height: 50px;font-size: 20px;font-weight: 750">
+                <center><span style="color:white;">{{ message }}</span></center>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+  <img src="/static/images/logoPharos.png" style="width: 100px; border: 0">
+
+  <div class="topnav-right">
+    {% if active_page == 'home' %}
+      <a href="/user/home" class="active">HOME</a>
+    {% else %}
+      <a href="/user/home">HOME</a>
+    {% endif %}
+
+    {% if active_page == 'account' %}
+      <a class="active" href="/user/profile">ACCOUNT</a>
+    {% else %}
+      <a href="/user/profile">ACCOUNT</a>
+    {% endif %}
+
+    {% if active_page == 'newReq' %}
+      <a class="active" href="/user/newRequest">NEW REQUEST</a>
+    {% else %}
+      <a href="/user/newRequest">NEW REQUEST</a>
+    {% endif %}
+
+    {% if active_page == 'editReport' %}
+      <a class="active" href="/user/editReport">EDIT REPORT</a>
+    {% else %}
+      <a href="/user/editReport">EDIT REPORT</a>
+    {% endif %}
+
+    {% if active_page == 'list' %}
+      <div class="dropdown">
+        <button class="active">LIST 
+          <i class="fa fa-caret-down"></i>
+        </button>
+    {% else %}
+      <div class="dropdown">
+        <button class="dropbtn">LIST 
+          <i class="fa fa-caret-down"></i>
+        </button>
+    {% endif %}
+
+        <div class="dropdown-content">
+          <a href="/user/list/request">LIST REQUEST</a>
+          <a href="/user/list/finished">LIST FINISHED REQUEST</a>
+          <a href="/user/list/readReport">LIST REPORT</a>
+        </div>
+      </div> 
+    <a href="/logout">LOGOUT</a>
+    <a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="menuFunction()">&#9776;</a>
+  </ul></div>
+</div>
+</div>
+    
+    <div id="content">{% block content %}
+
+    {% endblock %}</div>
+
+
+    <div id="script">
+    {% block script %}
+    {% endblock %}
+  </div>
+    <!-- </div> -->
+
+
+    
+
+
+    <!-- <div id="footer" style="position: fixed; bottom:0;">
+      {% block footer %}
+      &copy; Copyright 2019 by <a href="http://domain.invalid/">you</a>.
+      {% endblock %}
+    </div> -->
+
+
+
+<script src="http://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script>
+    window.onscroll = function() {scrollFunc()};
+
+    var navbar = document.getElementById("myTopnav");
+    var sticky = navbar.offsetTop;
+
+    function scrollFunc() {
+      if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky")
+      } else {
+        navbar.classList.remove("sticky");
+      }
+    }
+
+    function menuFunction() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+        x.className += " responsive";
+      } else {
+        x.className = "topnav";
+      }
+    }
+
+  $(document).ready(function(){
+        $("#successMessage").delay(3000).slideUp(300);
+
+    });
+  </script>
+  </body>
+</html>
